@@ -7,7 +7,7 @@ class StudentAdmin(admin.ModelAdmin):
     list_display = [
         '__str__',
         'phone',
-        'view_link',
+        # 'view_link',
     ]
     search_fields = ['name', 'phone']
 
