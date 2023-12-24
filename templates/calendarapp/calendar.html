@@ -28,7 +28,6 @@
                       <div class="fc-event">
                           <h3>{{ event.title }}</h3>
                           <p>{{ event.description }}</p>
-                          <p>{{event.id}}</p>
                           <p>From: {{ event.start_time }}</p>
                           <p>To: {{ event.end_time }}</p>
                       </div>
@@ -107,6 +106,7 @@
                               </div>
                           </div>
                           <div class="modal-footer">
+                              <button id="edit-event-button" data-event-id="" type="button" class="btn btn-secondary">Edit</button>
                               <button id="delete-event-button" data-event-id="" type="button" class="btn btn-danger">Delete</button>
                               <button id="add-to-next-week" data-event-id-week="" type="button" class="btn btn-success">Next Week</button>
                               <button id="add-to-next-day" data-event-id-day="" type="button" class="btn btn-primary">Next Day</button>
@@ -184,10 +184,12 @@
           var modalStart = document.getElementById('start_event_detail'); 
           var modalEnd = document.getElementById('end_event_detail'); 
           var modalDescripition = document.getElementById('description_event_detail'); 
+          var editButton = document.getElementById("edit-event-button");
           var deleteButton = document.getElementById("delete-event-button");
           var nextWeek = document.getElementById("add-to-next-week");
           var nextDay = document.getElementById("add-to-next-day");
 
+          editButton.setAttribute("data-event-id", id);
           deleteButton.setAttribute("data-event-id", id);
           nextWeek.setAttribute("data-event-id-week", id);
           nextDay.setAttribute("data-event-id-day", id);
@@ -246,9 +248,15 @@
     });
     function formatDateTime(dateTime) {
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' };
-      const dataFormatada = new Date(dateTime).toLocaleDateString('pt-BR', options);
+      const dataFormatada = new Date(dateTime).toLocaleDateString('zh-Hant', options);
       return dataFormatada;
     };
+
+    document.getElementById('edit-event-button').addEventListener('click', function() {
+      const eventId = this.getAttribute('data-event-id');
+      window.open(`/admin/calendarapp/event/${eventId}/change/`, "_blank");
+    });
+
     document.getElementById('delete-event-button').addEventListener('click', function() {
       const eventId = this.getAttribute('data-event-id');
       if (confirm('Are you sure you want to delete this event?')) {
