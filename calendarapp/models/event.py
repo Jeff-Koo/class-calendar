@@ -6,6 +6,24 @@ from calendarapp.models import EventAbstract
 from accounts.models import User
 
 
+class TIMESLOT_CHOICES(models.TextChoices):
+    NINE = '09:00 ~ 10:00', '09:00 ~ 10:00 for Mon to Fri / 09:30 ~ 10:30 for Sat'
+    TEN = '10:00 ~ 11:00', '10:00 ~ 11:00 for Mon to Fri / 10:30 ~ 11:30 for Sat'
+    ELEVEN = '11:00 ~ 12:00', '11:00 ~ 12:00 for Mon to Fri / 11:30 ~ 12:30 for Sat'
+    THIRTEEN = '13:00 ~ 14:00', '13:00 ~ 14:00'
+    FOURTEEN = '14:00 ~ 15:00', '14:00 ~ 15:00'
+    FIFTEEN = '15:00 ~ 16:00', '15:00 ~ 16:00'
+    SIXTEEN = '16:00 ~ 17:00', '16:00 ~ 17:00'
+    SEVENTEEN = '17:00 ~ 18:00', '17:00 ~ 18:00'
+    EIGHTEEN = '18:00 ~ 19:00', '18:00 ~ 19:00'
+
+
+class ROOM_CHOICES(models.TextChoices):
+    ROOM_A = 'Room A', 'Room A'
+    ROOM_B = 'Room B', 'Room B'
+    ROOM_C = 'Room C', 'Room C'
+
+
 class EventManager(models.Manager):
     """ Event manager """
 
@@ -31,6 +49,7 @@ class Event(EventAbstract):
     description = models.TextField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+    room = models.TextField(choices=ROOM_CHOICES.choices, blank=True)
 
     objects = EventManager()
 
