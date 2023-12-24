@@ -8,12 +8,11 @@ class EventAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "title",
-        # "user",
         "is_active",
         "is_deleted",
-        "student",
         "created_at",
         "updated_at",
+        "room",
     ]
     list_filter = ["is_active", "is_deleted"]
     search_fields = ["title"]
@@ -22,5 +21,5 @@ class EventAdmin(admin.ModelAdmin):
 @admin.register(models.EventMember)
 class EventMemberAdmin(admin.ModelAdmin):
     model = models.EventMember
-    list_display = ["id", "event", "user", "created_at", "updated_at"]
+    list_display = ["id", "event", "student"]
     list_filter = ["event"]

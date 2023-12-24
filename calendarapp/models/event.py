@@ -49,7 +49,6 @@ class Event(EventAbstract):
     description = models.TextField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="student_event", null=True)
     room = models.TextField(choices=ROOM_CHOICES.choices, blank=True)
 
     objects = EventManager()

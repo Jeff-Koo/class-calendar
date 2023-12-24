@@ -27,7 +27,7 @@ class EventForm(ModelForm):
                 format="%Y-%m-%dT%H:%M",
             ),
         }
-        exclude = ["user"]
+        exclude = ["room"]
 
     def __init__(self, *args, **kwargs):
         super(EventForm, self).__init__(*args, **kwargs)
@@ -39,4 +39,4 @@ class EventForm(ModelForm):
 class AddMemberForm(forms.ModelForm):
     class Meta:
         model = EventMember
-        fields = ["user"]
+        fields = ["student"]

@@ -64,7 +64,6 @@ def create_event(request):
         start_time = form.cleaned_data["start_time"]
         end_time = form.cleaned_data["end_time"]
         Event.objects.get_or_create(
-            user=request.user,
             title=title,
             description=description,
             start_time=start_time,
@@ -96,11 +95,11 @@ def add_eventmember(request, event_id):
             member = EventMember.objects.filter(event=event_id)
             event = Event.objects.get(id=event_id)
             if member.count() <= 9:
-                user = forms.cleaned_data["user"]
-                EventMember.objects.create(event=event, user=user)
+                student = forms.cleaned_data["student"]
+                EventMember.objects.create(event=event, student=student)
                 return redirect("calendarapp:calendar")
             else:
-                print("--------------User limit exceed!-----------------")
+                print("--------------Student limit exceed!-----------------")
     context = {"form": forms}
     return render(request, "add_member.html", context)
 
@@ -139,7 +138,7 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
         forms = self.form_class(request.POST)
         if forms.is_valid():
             form = forms.save(commit=False)
-            form.user = request.user
+            form.student = request.student
             form.save()
             return redirect("calendarapp:calendar")
         context = {"form": forms}

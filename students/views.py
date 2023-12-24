@@ -6,7 +6,7 @@ from students.models import Student
 
 
 
-@login_required
+@login_required(login_url="signup")
 def all_student(request: HttpRequest) -> HttpResponse:
 
     student_list = Student.objects.all()
@@ -20,7 +20,7 @@ def all_student(request: HttpRequest) -> HttpResponse:
 
 
 # view student detail with attendence on his/her lessons
-@login_required
+@login_required(login_url="signup")
 def get_student(request: HttpRequest, pk: int) -> HttpResponse:
     try:
         student = Student.objects.get(pk=pk)
