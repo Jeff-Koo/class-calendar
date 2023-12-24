@@ -8,9 +8,10 @@ class EventAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "title",
-        "user",
+        # "user",
         "is_active",
         "is_deleted",
+        "student",
         "created_at",
         "updated_at",
     ]

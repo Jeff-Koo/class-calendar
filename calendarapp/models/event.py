@@ -4,6 +4,7 @@ from django.urls import reverse
 
 from calendarapp.models import EventAbstract
 from accounts.models import User
+from students.models import Student
 
 
 class TIMESLOT_CHOICES(models.TextChoices):
@@ -27,13 +28,12 @@ class ROOM_CHOICES(models.TextChoices):
 class EventManager(models.Manager):
     """ Event manager """
 
-    def get_all_events(self, user):
-        events = Event.objects.filter(user=user, is_active=True, is_deleted=False)
+    def get_all_events(self):
+        events = Event.objects.filter(is_active=True, is_deleted=False)
         return events
 
-    def get_running_events(self, user):
+    def get_running_events(self):
         running_events = Event.objects.filter(
-            user=user,
             is_active=True,
             is_deleted=False,
             end_time__gte=datetime.now().date(),
@@ -44,11 +44,12 @@ class EventManager(models.Manager):
 class Event(EventAbstract):
     """ Event model """
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="events")
+    # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="events")
     title = models.CharField(max_length=200)
     description = models.TextField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="student_event", null=True)
     room = models.TextField(choices=ROOM_CHOICES.choices, blank=True)
 
     objects = EventManager()
@@ -63,3 +64,8 @@ class Event(EventAbstract):
     def get_html_url(self):
         url = reverse("calendarapp:event-detail", args=(self.id,))
         return f'<a href="{url}"> {self.title} </a>'
+
+    @property
+    def admin_url(self) -> str:
+        return reverse('admin:calendarapp_event_change', args=[self.pk])
+
