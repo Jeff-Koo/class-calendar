@@ -28,4 +28,9 @@ urlpatterns = [
         views.RunningEventsListView.as_view(),
         name="running_events",
     ),
+    path(
+        "multi-input-event-member/",
+        views.multi_input_member_to_event,
+        name="multi-input-event-member",
+    ),
 ]

@@ -40,3 +40,65 @@ class AddMemberForm(forms.ModelForm):
     class Meta:
         model = EventMember
         fields = ["student"]
+
+
+TIMESLOT_CHOICES = (
+    ('09:00 ~ 10:00', '09:00 ~ 10:00 for Mon to Fri / 09:30 ~ 10:30 for Sat'),
+    ('10:00 ~ 11:00', '10:00 ~ 11:00 for Mon to Fri / 10:30 ~ 11:30 for Sat'),
+    ('11:00 ~ 12:00', '11:00 ~ 12:00 for Mon to Fri / 11:30 ~ 12:30 for Sat'),
+    ('13:00 ~ 14:00', '13:00 ~ 14:00'),
+    ('14:00 ~ 15:00', '14:00 ~ 15:00'),
+    ('15:00 ~ 16:00', '15:00 ~ 16:00'),
+    ('16:00 ~ 17:00', '16:00 ~ 17:00'),
+    ('17:00 ~ 18:00', '17:00 ~ 18:00'),
+    ('18:00 ~ 19:00', '18:00 ~ 19:00'),
+)
+
+ROOM_CHOICES = (
+    ('A', 'Room A'),
+    ('B', 'Room B'),
+    ('C', 'Room C'),
+)
+
+class InputMemberToEventForm(forms.Form):
+    student = forms.CharField(
+        label='Student Name', 
+        widget=forms.TextInput(attrs={'placeholder':"Student Name"}),
+        max_length=50,
+    )
+    listOfDate = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'form-control border-radius-0 mb-2', 
+            'placeholder': '2023/12/01\n2023/12/8\n2023/12/15', 
+            'rows': 20, 
+            }),
+        required=True
+    )
+    
+    # start_time = forms.TimeField(
+    #     label='Lesson Start Time', 
+    #     widget=forms.TimeInput(attrs={"type": "time", "class": "form-control"})
+    # )
+    # end_time = forms.TimeField(
+    #     label='Lesson End Time', 
+    #     widget=forms.TimeInput(attrs={"type": "time", "class": "form-control"})
+    # )
+    timeslot = forms.ChoiceField(
+        label='Start Time to End time', 
+        choices=TIMESLOT_CHOICES, 
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+    room = forms.ChoiceField(
+        label='Room', 
+        choices=ROOM_CHOICES, 
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+    
+    def clean_listOfDate(self):
+        listOfDate = self.cleaned_data.get('listOfDate')
+        arrayOfDate = listOfDate.splitlines()
+        arrayOfDate = [date.strip() for date in arrayOfDate if date.strip()]
+
+        print("\nafter date.strip():", arrayOfDate)
+        return arrayOfDate
+

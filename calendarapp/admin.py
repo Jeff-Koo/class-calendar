@@ -8,10 +8,12 @@ class EventAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "title",
-        "is_active",
-        "is_deleted",
-        "created_at",
-        "updated_at",
+        # "is_active",
+        # "is_deleted",
+        # "created_at",
+        # "updated_at",
+        "start_time",
+        "end_time",
         "room",
     ]
     list_filter = ["is_active", "is_deleted"]

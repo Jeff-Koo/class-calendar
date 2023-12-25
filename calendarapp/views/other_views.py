@@ -13,8 +13,11 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 from calendarapp.models import EventMember, Event
+from students.models import Student
 from calendarapp.utils import Calendar
-from calendarapp.forms import EventForm, AddMemberForm
+from calendarapp.forms import EventForm, AddMemberForm, InputMemberToEventForm
+from django.contrib import messages
+from django.utils.html import strip_tags
 
 
 def get_date(req_day):
@@ -138,7 +141,6 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
         forms = self.form_class(request.POST)
         if forms.is_valid():
             form = forms.save(commit=False)
-            form.student = request.student
             form.save()
             return redirect("calendarapp:calendar")
         context = {"form": forms}
@@ -178,3 +180,92 @@ def next_day(request, event_id):
         return JsonResponse({'message': 'Sucess!'})
     else:
         return JsonResponse({'message': 'Error!'}, status=400)
+
+
+def multi_input_member_to_event(request):
+    
+    if request.method == 'POST':
+
+        form = InputMemberToEventForm(request.POST)
+        
+        # errors = form.errors.as_data()
+        # formatted_errors = {}
+        # for field, error_list in errors.items():
+        #     formatted_errors[field] = strip_tags(str(error_list[0]))[2:-2]
+        # error_message = str("<br>".join(formatted_errors.values()))
+        # messages.error(request, mark_safe(error_message))
+        
+        if form.is_valid():
+            
+            # the following timeslot need changes for Sat Morning Class
+            SAT_MORNING_TIMESLOT = [
+                datetime.strptime("09:00", '%H:%M').time(),
+                datetime.strptime("10:00", '%H:%M').time(),
+                datetime.strptime("11:00", '%H:%M').time(),
+            ]
+            
+            student_input = form.cleaned_data['student']
+            arrayOfDate = form.cleaned_data['listOfDate']
+            timeslot = form.cleaned_data['timeslot']
+            # start_timeonly = form.cleaned_data['start_time']
+            # end_timeonly = form.cleaned_data['end_time']
+            room = form.cleaned_data['room']
+            
+            print("chekc room?", room)
+            
+            # split timeslot 
+            start_timeonly, end_timeonly = timeslot.split(' ~ ')
+            
+            # format the time 
+            start_timeonly = datetime.strptime(start_timeonly, '%H:%M').time()
+            end_timeonly = datetime.strptime(end_timeonly, '%H:%M').time()
+            
+            # create student if not exists
+            student, student_created = Student.objects.get_or_create(
+                name=student_input,
+            )
+            
+            
+            for date in arrayOfDate:
+                # Parse the date and time strings
+                date = datetime.strptime(date, '%Y/%m/%d').date()
+
+                # Combine the date and time into a datetime object
+                start_time = datetime.combine(date, start_timeonly)
+                end_time = datetime.combine(date, end_timeonly)
+
+                # if Sat, special timeslot for morning class (+30 minutes to start and end)
+                if date.weekday() == 5 and  start_timeonly in SAT_MORNING_TIMESLOT:
+                    start_time = start_time + timedelta(minutes=30)
+                    end_time = end_time + timedelta(minutes=30)
+                    
+                # Format the combined datetime as a string
+                formatted_start_time = start_time.strftime('%Y-%m-%dT%H:%M:%S')
+                formatted_end_time = end_time.strftime('%Y-%m-%dT%H:%M:%S')
+                
+                # create the lesson if not exist
+                event, event_created = Event.objects.get_or_create(
+                    start_time=formatted_start_time,
+                    end_time=formatted_end_time,
+                    room=room,
+                    defaults={
+                        "title": "date + start_timeonly + room",
+                        "description": "empty?"
+                    },
+                )
+                
+                # dont know why room is not stored for event 
+                
+                # try to add the student to the lesson 
+                try:
+                    EventMember.objects.create(event=event, student=student)
+                except:
+                    # same person in the same Event
+                    return JsonResponse({'message': 'Error!'}, status=400)
+
+            return redirect('calendarapp:calendar')
+    else:
+        form = InputMemberToEventForm()
+
+    return render(request, 'calendarapp/input_event_member.html', {'form': form})
+
