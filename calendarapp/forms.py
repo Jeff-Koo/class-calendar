@@ -1,4 +1,4 @@
-from django.forms import ModelForm, DateInput
+from django.forms import ModelForm, DateInput, ValidationError
 from calendarapp.models import Event, EventMember
 from students.models import Student
 from django import forms
@@ -90,10 +90,13 @@ class InputMemberToEventForm(forms.Form):
     )
     
     def clean_listOfDate(self):
-        listOfDate = self.cleaned_data.get('listOfDate')
-        arrayOfDate = listOfDate.splitlines()
-        arrayOfDate = [date.strip() for date in arrayOfDate if date.strip()]
+        try:
+            listOfDate = self.cleaned_data.get('listOfDate')
+            arrayOfDate = listOfDate.splitlines()
+            arrayOfDate = [date.strip() for date in arrayOfDate if date.strip()]
 
-        print("\nafter date.strip():", arrayOfDate)
-        return arrayOfDate
+            print("\nafter date.strip():", arrayOfDate)
+            return arrayOfDate
+        except:
+            raise ValidationError("Please enter the valid dates.")
 

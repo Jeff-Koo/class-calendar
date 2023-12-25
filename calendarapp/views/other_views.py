@@ -188,13 +188,6 @@ def multi_input_member_to_event(request):
 
         form = InputMemberToEventForm(request.POST)
         
-        # errors = form.errors.as_data()
-        # formatted_errors = {}
-        # for field, error_list in errors.items():
-        #     formatted_errors[field] = strip_tags(str(error_list[0]))[2:-2]
-        # error_message = str("<br>".join(formatted_errors.values()))
-        # messages.error(request, mark_safe(error_message))
-        
         if form.is_valid():
             
             # the following timeslot need changes for Sat Morning Class
@@ -216,46 +209,52 @@ def multi_input_member_to_event(request):
             start_timeonly = datetime.strptime(start_timeonly, '%H:%M').time()
             end_timeonly = datetime.strptime(end_timeonly, '%H:%M').time()
             
-            # create student if not exists
-            student, student_created = Student.objects.get_or_create(
-                name=student_input,
-            )
             
-            
-            for date in arrayOfDate:
-                # Parse the date and time strings
-                date = datetime.strptime(date, '%Y/%m/%d').date()
-
-                # Combine the date and time into a datetime object
-                start_time = datetime.combine(date, start_timeonly)
-                end_time = datetime.combine(date, end_timeonly)
-
-                # if Sat, special timeslot for morning class (+30 minutes to start and end)
-                if date.weekday() == 5 and  start_timeonly in SAT_MORNING_TIMESLOT:
-                    start_time = start_time + timedelta(minutes=30)
-                    end_time = end_time + timedelta(minutes=30)
-                    
-                # Format the combined datetime as a string
-                formatted_start_time = start_time.strftime('%Y-%m-%dT%H:%M:%S')
-                formatted_end_time = end_time.strftime('%Y-%m-%dT%H:%M:%S')
-                
-                # create the lesson if not exist
-                event, event_created = Event.objects.get_or_create(
-                    start_time=formatted_start_time,
-                    end_time=formatted_end_time,
-                    room=room,
-                    defaults={
-                        "title": "date + start_timeonly + room",
-                        "description": "empty?"
-                    },
+            try:
+                # create student if not exists
+                student, student_created = Student.objects.get_or_create(
+                    name=student_input,
                 )
                 
-                # try to add the student to the lesson 
-                try:
-                    EventMember.objects.create(event=event, student=student)
-                except:
-                    # same person in the same Event
-                    return JsonResponse({'message': 'Error!'}, status=400)
+                for date in arrayOfDate:
+                    # Parse the date and time strings
+                    date = datetime.strptime(date, '%Y/%m/%d').date()
+
+                    # Combine the date and time into a datetime object
+                    start_time = datetime.combine(date, start_timeonly)
+                    end_time = datetime.combine(date, end_timeonly)
+
+                    # if Sat, special timeslot for morning class (+30 minutes to start and end)
+                    if date.weekday() == 5 and  start_timeonly in SAT_MORNING_TIMESLOT:
+                        start_time = start_time + timedelta(minutes=30)
+                        end_time = end_time + timedelta(minutes=30)
+                        
+                    # Format the combined datetime as a string
+                    formatted_start_time = start_time.strftime('%Y-%m-%dT%H:%M:%S')
+                    formatted_end_time = end_time.strftime('%Y-%m-%dT%H:%M:%S')
+                    
+                    # create the lesson if not exist
+                    event, event_created = Event.objects.get_or_create(
+                        start_time=formatted_start_time,
+                        end_time=formatted_end_time,
+                        room=room,
+                        defaults={
+                            "title": "date + start_timeonly + room",
+                            "description": "empty?"
+                        },
+                    )
+                    
+                    # try to add the student to the lesson 
+                    try:
+                        EventMember.objects.create(event=event, student=student)
+                    except:
+                        # same person in the same Event
+                        messages.error(request, 'same person in the same Event!')
+                        return redirect('calendarapp:multi-input-event-member')
+            except:
+                # anything go wrong
+                messages.error(request, 'something wrong!')
+                return redirect('calendarapp:multi-input-event-member')
 
             return redirect('calendarapp:calendar')
     else:
