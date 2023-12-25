@@ -254,8 +254,6 @@ def multi_input_member_to_event(request):
                     },
                 )
                 
-                # dont know why room is not stored for event 
-                
                 # try to add the student to the lesson 
                 try:
                     EventMember.objects.create(event=event, student=student)

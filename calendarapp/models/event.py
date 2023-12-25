@@ -8,9 +8,9 @@ from students.models import Student
 
 
 class ROOM_CHOICES(models.TextChoices):
-    ROOM_A = 'Room A', 'Room A'
-    ROOM_B = 'Room B', 'Room B'
-    ROOM_C = 'Room C', 'Room C'
+    ROOM_A = 'A', 'Room A'
+    ROOM_B = 'B', 'Room B'
+    ROOM_C = 'C', 'Room C'
 
 
 class EventManager(models.Manager):
