@@ -207,11 +207,7 @@ def multi_input_member_to_event(request):
             student_input = form.cleaned_data['student']
             arrayOfDate = form.cleaned_data['listOfDate']
             timeslot = form.cleaned_data['timeslot']
-            # start_timeonly = form.cleaned_data['start_time']
-            # end_timeonly = form.cleaned_data['end_time']
             room = form.cleaned_data['room']
-            
-            print("chekc room?", room)
             
             # split timeslot 
             start_timeonly, end_timeonly = timeslot.split(' ~ ')

@@ -23,17 +23,16 @@
                     <form method="POST">
                         {% csrf_token %}
                         <div class="form-group col-lg-6">
-                            <h4 class="py-2">Enquiry form</h4>
+                            <h4 class="py-2">Input Form</h4>
                             {{ form.student }}
                             {{ form.listOfDate }}
                             {{ form.timeslot }}
-                            {{ form.start_time }}
-                            {{ form.end_time }}
                             {{ form.room }}
                             <button class="btn-input btn btn-kry-orange py-2">
                                 <i class="i-send"></i>
                                 <span>Submit</span>
                             </button>
+                            {{ form.media.js }}
                             {{ form.errors }}
                         </div>
                     </form>
@@ -49,4 +48,9 @@
     <script type="text/javascript" src="{% static 'js/plugins/jquery.dataTables.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/plugins/dataTables.bootstrap.min.js' %}"></script>
     <script type="text/javascript">$('#sampleTable').DataTable();</script>
+    <script>
+        $(document).ready(function() {
+            $('#id_student').select2();
+        });
+    </script>
 {% endblock extrascripts %}

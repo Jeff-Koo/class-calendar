@@ -1,6 +1,8 @@
 from django.forms import ModelForm, DateInput
 from calendarapp.models import Event, EventMember
+from students.models import Student
 from django import forms
+from django_select2 import forms as s2forms
 
 
 class EventForm(ModelForm):
@@ -61,28 +63,21 @@ ROOM_CHOICES = (
 )
 
 class InputMemberToEventForm(forms.Form):
-    student = forms.CharField(
+    student = forms.ModelChoiceField(
         label='Student Name', 
-        widget=forms.TextInput(attrs={'placeholder':"Student Name"}),
-        max_length=50,
+        queryset=Student.objects.all(),
+        widget=s2forms.Select2Widget(
+            attrs={'style': 'width: 100%;'}
+        ),
     )
     listOfDate = forms.CharField(
         widget=forms.Textarea(attrs={
             'class': 'form-control border-radius-0 mb-2', 
-            'placeholder': '2023/12/01\n2023/12/8\n2023/12/15', 
+            'placeholder': 'e.g.\n2023/12/01\n2023/12/8\n2023/12/15', 
             'rows': 20, 
-            }),
+        }),
         required=True
     )
-    
-    # start_time = forms.TimeField(
-    #     label='Lesson Start Time', 
-    #     widget=forms.TimeInput(attrs={"type": "time", "class": "form-control"})
-    # )
-    # end_time = forms.TimeField(
-    #     label='Lesson End Time', 
-    #     widget=forms.TimeInput(attrs={"type": "time", "class": "form-control"})
-    # )
     timeslot = forms.ChoiceField(
         label='Start Time to End time', 
         choices=TIMESLOT_CHOICES, 
