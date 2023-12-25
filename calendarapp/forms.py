@@ -88,15 +88,4 @@ class InputMemberToEventForm(forms.Form):
         choices=ROOM_CHOICES, 
         widget=forms.Select(attrs={"class": "form-control"})
     )
-    
-    def clean_listOfDate(self):
-        try:
-            listOfDate = self.cleaned_data.get('listOfDate')
-            arrayOfDate = listOfDate.splitlines()
-            arrayOfDate = [date.strip() for date in arrayOfDate if date.strip()]
-
-            print("\nafter date.strip():", arrayOfDate)
-            return arrayOfDate
-        except:
-            raise ValidationError("Please enter the valid dates.")
 

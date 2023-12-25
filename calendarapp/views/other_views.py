@@ -188,6 +188,13 @@ def multi_input_member_to_event(request):
 
         form = InputMemberToEventForm(request.POST)
         
+        errors = form.errors.as_data()
+        formatted_errors = {}
+        for field, error_list in errors.items():
+            formatted_errors[field] = strip_tags(str(error_list[0]))[2:-2]
+        error_message = str("<br>".join(formatted_errors.values()))
+        messages.error(request, mark_safe(error_message))
+        
         if form.is_valid():
             
             # the following timeslot need changes for Sat Morning Class
@@ -198,64 +205,86 @@ def multi_input_member_to_event(request):
             ]
             
             student_input = form.cleaned_data['student']
-            arrayOfDate = form.cleaned_data['listOfDate']
+            listOfDate = form.cleaned_data['listOfDate']
             timeslot = form.cleaned_data['timeslot']
             room = form.cleaned_data['room']
             
             # split timeslot 
             start_timeonly, end_timeonly = timeslot.split(' ~ ')
             
-            # format the time 
+            # format the time string
             start_timeonly = datetime.strptime(start_timeonly, '%H:%M').time()
             end_timeonly = datetime.strptime(end_timeonly, '%H:%M').time()
             
             
-            try:
-                # create student if not exists
-                student, student_created = Student.objects.get_or_create(
-                    name=student_input,
+            # create student if not exists
+            student, student_created = Student.objects.get_or_create(
+                name=student_input,
+            )
+            
+            
+            arrayOfDate = listOfDate.splitlines()
+            arrayOfDate = [date.strip() for date in arrayOfDate if date.strip()]
+            
+            arrayOfFormatedDate = []
+            for date in arrayOfDate:
+                try:
+                    # format the date strings
+                    arrayOfFormatedDate.append(datetime.strptime(date, '%Y/%m/%d').date())
+                except:
+                    messages.error(request, 'something wrong with the input date!')
+                    form = InputMemberToEventForm(
+                        initial={
+                            'student': student_input,
+                            'room': room,
+                            'listOfDate': listOfDate,
+                            'timeslot': timeslot,
+                        }
+                    )
+                    return render(request, 'calendarapp/input_event_member.html', {'form': form})
+            
+
+            for date in arrayOfFormatedDate:
+                # Combine the date and time into a datetime object
+                start_time = datetime.combine(date, start_timeonly)
+                end_time = datetime.combine(date, end_timeonly)
+
+                # if Sat, special timeslot for morning class (+30 minutes to start and end)
+                if date.weekday() == 5 and  start_timeonly in SAT_MORNING_TIMESLOT:
+                    start_time = start_time + timedelta(minutes=30)
+                    end_time = end_time + timedelta(minutes=30)
+                    
+                # Format the combined datetime as a string
+                formatted_start_time = start_time.strftime('%Y-%m-%dT%H:%M:%S')
+                formatted_end_time = end_time.strftime('%Y-%m-%dT%H:%M:%S')
+                
+                # create the lesson if not exist
+                event, event_created = Event.objects.get_or_create(
+                    start_time = formatted_start_time,
+                    end_time = formatted_end_time,
+                    room = room,
+                    defaults = {
+                        "title": "",
+                        "description": ""
+                    },
                 )
                 
-                for date in arrayOfDate:
-                    # Parse the date and time strings
-                    date = datetime.strptime(date, '%Y/%m/%d').date()
-
-                    # Combine the date and time into a datetime object
-                    start_time = datetime.combine(date, start_timeonly)
-                    end_time = datetime.combine(date, end_timeonly)
-
-                    # if Sat, special timeslot for morning class (+30 minutes to start and end)
-                    if date.weekday() == 5 and  start_timeonly in SAT_MORNING_TIMESLOT:
-                        start_time = start_time + timedelta(minutes=30)
-                        end_time = end_time + timedelta(minutes=30)
-                        
-                    # Format the combined datetime as a string
-                    formatted_start_time = start_time.strftime('%Y-%m-%dT%H:%M:%S')
-                    formatted_end_time = end_time.strftime('%Y-%m-%dT%H:%M:%S')
-                    
-                    # create the lesson if not exist
-                    event, event_created = Event.objects.get_or_create(
-                        start_time=formatted_start_time,
-                        end_time=formatted_end_time,
-                        room=room,
-                        defaults={
-                            "title": "date + start_timeonly + room",
-                            "description": "empty?"
-                        },
+                # try to add the student to the lesson 
+                try:
+                    EventMember.objects.create(event = event, student = student)
+                except:
+                    messages.error(request, 'the same Student is already in the same Class!')
+                    form = InputMemberToEventForm(
+                        initial={
+                            'student': student_input,
+                            'room': room,
+                            'listOfDate': listOfDate,
+                            'timeslot': timeslot,
+                        }
                     )
-                    
-                    # try to add the student to the lesson 
-                    try:
-                        EventMember.objects.create(event=event, student=student)
-                    except:
-                        # same person in the same Event
-                        messages.error(request, 'same person in the same Event!')
-                        return redirect('calendarapp:multi-input-event-member')
-            except:
-                # anything go wrong
-                messages.error(request, 'something wrong!')
-                return redirect('calendarapp:multi-input-event-member')
-
+                    return render(request, 'calendarapp/input_event_member.html', {'form': form})
+            
+            messages.success(request, 'Success!')
             return redirect('calendarapp:calendar')
     else:
         form = InputMemberToEventForm()
