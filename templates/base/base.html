@@ -193,28 +193,7 @@
                 {% block breadcrumb %}
                 {% endblock breadcrumb %}
             </div>
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="container" id="msg">
-                        <div class="alert alert-{{message.tags}} alert-dismissable text-center" role="alert">
-                            <strong>
-                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} 
-                                Error : 
-                            {% else %}
-                                {{message.tags | title}} 
-                            {% endif %}
-                            </strong>
-                            {{message}}
-                        </div>
-                        <script>
-                            var message_ele = document.getElementById("msg");
-                            setTimeout(function(){ 
-                                message_ele.style.display = "none"; 
-                            }, 3000);
-                        </script>
-                    </div>
-                {% endfor %} 
-            {% endif %}
+            {% include 'base/_alert.html' %}
             {% block content %}
             {% endblock content %}
         </main>
