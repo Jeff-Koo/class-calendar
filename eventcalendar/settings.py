@@ -11,6 +11,18 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from typing import List
+from dotenv import load_dotenv
+
+# Load variables from .env, if available
+path = os.path.dirname(os.path.abspath(__file__)) + '/../.env'
+print(path)
+if os.path.isfile(path):
+    load_dotenv(path)
+
+def _get(name: str, default=None, coerse_to=None):
+    val = os.environ.get(name, default)
+    return coerse_to(val) if coerse_to is not None else val
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,14 +32,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "i8e1s3!_(fjsiv%1pn3sb3o=s)!p*nzwh1$gp5-l&%nb!d=y_s"
+SECRET_KEY = _get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-#DEBUG = False
+DEBUG = _get('DEBUG', False, bool)
 DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
 
-ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS: List[str] = _get('ALLOWED_HOSTS', '', str).split(',')
 
 
 # Application definition
@@ -91,11 +103,11 @@ WSGI_APPLICATION = "eventcalendar.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'fireland_calendar_db',
-        'USER': 'user',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
-        'DATABASE_PORT': '5432',
+        'NAME': _get('POSTGRES_DB'),
+        'USER': _get('POSTGRES_USER'),
+        'PASSWORD': _get('POSTGRES_PASSWORD'),
+        'HOST': _get('POSTGRES_HOST'),
+        'DATABASE_PORT': _get('POSTGRES_PORT'),
     }
 }
 

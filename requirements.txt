@@ -3,3 +3,4 @@ Django==4.2.6
 sqlparse==0.4.4
 psycopg2-binary==2.9.9
 django-select2==8.1.2
+python-dotenv==1.0.0
