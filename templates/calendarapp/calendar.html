@@ -124,6 +124,7 @@
 
 {% block extrascripts %}
 <script src="{% static 'calender/main.js' %}"></script>
+<script src="{% static 'fullcalendar-scheduler-6.1.10/dist/index.global.js' %}"></script>
 <script>
   function converterDataParaDjangoFormat(data) {
       const dataJS = new Date(data);
@@ -141,10 +142,11 @@
       var today = new Date();
 
       var calendar = new FullCalendar.Calendar(calendarEl, {
+        schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay,list'
+          right: 'dayGridMonth,timeGridWeek,resourceTimeGridDay,list'
         },
         slotLabelFormat: {
           hour: '2-digit',
@@ -155,8 +157,14 @@
         },
         slotMinTime: '08:00',
         slotMaxTime: '21:00',
+        nowIndicator: true,
         initialDate: today,
         initialView: 'timeGridWeek',
+        resources: [
+          { id: 'roomA', title: 'Room A' },
+          { id: 'roomB', title: 'Room B' },
+          { id: 'roomC', title: 'Room C' }
+        ],
         navLinks: true, // can click day/week names to navigate views
         selectable: true,
         selectMirror: true,
