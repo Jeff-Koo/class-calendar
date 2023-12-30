@@ -1,0 +1,13 @@
+**/__pycache__ 
+**/.venv
+**/.vscode
+**/.DS_Store
+**/.github
+**/.git
+**/.venv
+*.md
+.gitignore
+.dockerignore
+docker-compose.yaml
+Dockerfile
+**/static
