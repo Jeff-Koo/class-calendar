@@ -230,7 +230,7 @@ def multi_input_member_to_event(request):
             for date in arrayOfDate:
                 try:
                     # format the date strings
-                    arrayOfFormatedDate.append(datetime.strptime(date, '%Y/%m/%d').date())
+                    arrayOfFormatedDate.append(datetime.strptime(date, '%d/%m/%Y').date())
                 except:
                     messages.error(request, 'something wrong with the input date!')
                     form = InputMemberToEventForm(
