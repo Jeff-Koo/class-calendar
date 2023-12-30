@@ -146,7 +146,17 @@
           center: 'title',
           right: 'dayGridMonth,timeGridWeek,timeGridDay,list'
         },
+        slotLabelFormat: {
+          hour: '2-digit',
+          minute: '2-digit',
+          omitZeroMinute: false,
+          meridiem: false,
+          hour12: false,
+        },
+        slotMinTime: '08:00',
+        slotMaxTime: '21:00',
         initialDate: today,
+        initialView: 'timeGridWeek',
         navLinks: true, // can click day/week names to navigate views
         selectable: true,
         selectMirror: true,

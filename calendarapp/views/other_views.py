@@ -210,11 +210,11 @@ def multi_input_member_to_event(request):
             room = form.cleaned_data['room']
             
             # split timeslot 
-            start_timeonly, end_timeonly = timeslot.split(' ~ ')
+            start_timeonly_str, end_timeonly_str = timeslot.split(' ~ ')
             
             # format the time string
-            start_timeonly = datetime.strptime(start_timeonly, '%H:%M').time()
-            end_timeonly = datetime.strptime(end_timeonly, '%H:%M').time()
+            start_timeonly = datetime.strptime(start_timeonly_str, '%H:%M').time()
+            end_timeonly = datetime.strptime(end_timeonly_str, '%H:%M').time()
             
             
             # create student if not exists
@@ -253,25 +253,22 @@ def multi_input_member_to_event(request):
                 if date.weekday() == 5 and  start_timeonly in SAT_MORNING_TIMESLOT:
                     start_time = start_time + timedelta(minutes=30)
                     end_time = end_time + timedelta(minutes=30)
-                    
+                
                 # Format the combined datetime as a string
                 formatted_start_time = start_time.strftime('%Y-%m-%dT%H:%M:%S')
                 formatted_end_time = end_time.strftime('%Y-%m-%dT%H:%M:%S')
                 
                 # create the lesson if not exist
-                event, event_created = Event.objects.get_or_create(
-                    start_time = formatted_start_time,
-                    end_time = formatted_end_time,
-                    room = room,
-                    defaults = {
-                        "title": "",
-                        "description": ""
-                    },
-                )
-                
-                # try to add the student to the lesson 
                 try:
-                    EventMember.objects.create(event = event, student = student)
+                    event = Event.objects.create(
+                        start_time = formatted_start_time,
+                        end_time = formatted_end_time,
+                        room = room,
+                        student = student,
+                        title = f"{student.name} - {start_timeonly_str} (Room {room}) ",  # Update the title field,
+                        description = "",
+                        attendence = False,
+                    )
                 except:
                     messages.error(request, 'the same Student is already in the same Class!')
                     form = InputMemberToEventForm(
@@ -283,6 +280,21 @@ def multi_input_member_to_event(request):
                         }
                     )
                     return render(request, 'calendarapp/input_event_member.html', {'form': form})
+                
+                # try to add the student to the lesson 
+                # try:
+                #     EventMember.objects.create(event = event, student = student)
+                # except:
+                #     messages.error(request, 'the same Student is already in the same Class!')
+                #     form = InputMemberToEventForm(
+                #         initial={
+                #             'student': student_input,
+                #             'room': room,
+                #             'listOfDate': listOfDate,
+                #             'timeslot': timeslot,
+                #         }
+                #     )
+                #     return render(request, 'calendarapp/input_event_member.html', {'form': form})
             
             messages.success(request, 'Success!')
             return redirect('calendarapp:calendar')

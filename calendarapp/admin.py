@@ -12,9 +12,11 @@ class EventAdmin(admin.ModelAdmin):
         # "is_deleted",
         # "created_at",
         # "updated_at",
+        "student",
         "start_time",
         "end_time",
         "room",
+        "attendence",
     ]
     list_filter = ["is_active", "is_deleted"]
     search_fields = ["title"]

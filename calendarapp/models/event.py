@@ -1,9 +1,9 @@
 from datetime import datetime
 from django.db import models
+from django.db.models import UniqueConstraint
 from django.urls import reverse
 
 from calendarapp.models import EventAbstract
-from accounts.models import User
 from students.models import Student
 
 
@@ -32,14 +32,23 @@ class EventManager(models.Manager):
 class Event(EventAbstract):
     """ Event model """
 
-    # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="events")
     title = models.CharField(max_length=200)
     description = models.TextField()
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="student_class")
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     room = models.TextField(choices=ROOM_CHOICES.choices, blank=True)
+    attendence = models.BooleanField(default=False)
 
     objects = EventManager()
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=['student', 'start_time', 'end_time'],
+                name='unique_student_timeslot'
+            )
+        ]
 
     def __str__(self):
         return self.title

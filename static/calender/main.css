@@ -354,7 +354,7 @@ When it's NOT activated, the fc-button classes won't even be in the DOM.
 
   }
 .fc .fc-scrollgrid-liquid {
-    height: 100%;
+    height: calc(14 * 2 * 3em);
   }
 .fc .fc-scrollgrid-section { /* a <tr> */
     height: 1px /* better than 0, for firefox */
@@ -1067,7 +1067,7 @@ A VERTICAL event
     z-index: 1;
   }
 .fc .fc-timegrid-slot { /* a <td> */
-    height: 1.5em;
+    height: 3em;
     border-bottom: 0 /* each cell owns its top border */
   }
 .fc .fc-timegrid-slot:empty:before {
