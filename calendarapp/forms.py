@@ -5,45 +5,6 @@ from django import forms
 from django_select2 import forms as s2forms
 
 
-class EventForm(ModelForm):
-    class Meta:
-        model = Event
-        fields = ["title", "description", "start_time", "end_time"]
-        # datetime-local is a HTML5 input type
-        widgets = {
-            "title": forms.TextInput(
-                attrs={"class": "form-control", "placeholder": "Enter event title"}
-            ),
-            "description": forms.Textarea(
-                attrs={
-                    "class": "form-control",
-                    "placeholder": "Enter event description",
-                }
-            ),
-            "start_time": DateInput(
-                attrs={"type": "datetime-local", "class": "form-control"},
-                format="%Y-%m-%dT%H:%M",
-            ),
-            "end_time": DateInput(
-                attrs={"type": "datetime-local", "class": "form-control"},
-                format="%Y-%m-%dT%H:%M",
-            ),
-        }
-        exclude = ["room"]
-
-    def __init__(self, *args, **kwargs):
-        super(EventForm, self).__init__(*args, **kwargs)
-        # input_formats to parse HTML5 datetime-local input to datetime field
-        self.fields["start_time"].input_formats = ("%Y-%m-%dT%H:%M",)
-        self.fields["end_time"].input_formats = ("%Y-%m-%dT%H:%M",)
-
-
-class AddMemberForm(forms.ModelForm):
-    class Meta:
-        model = EventMember
-        fields = ["student"]
-
-
 TIMESLOT_CHOICES = (
     ('09:00 ~ 10:00', '09:00 ~ 10:00 for Mon to Fri / 09:30 ~ 10:30 for Sat'),
     ('10:00 ~ 11:00', '10:00 ~ 11:00 for Mon to Fri / 10:30 ~ 11:30 for Sat'),
@@ -61,6 +22,52 @@ ROOM_CHOICES = (
     ('B', 'Room B'),
     ('C', 'Room C'),
 )
+
+
+class EventForm(ModelForm):
+    class Meta:
+        model = Event
+        fields = ["title", "start_time", "end_time", "student", "room", "description"]
+        # datetime-local is a HTML5 input type
+        widgets = {
+            "title": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Enter event title"}
+            ),
+            "description": forms.Textarea(
+                attrs={
+                    "rows": "5",
+                    "class": "form-control",
+                    "placeholder": "Enter event description",
+                }
+            ),
+            "start_time": DateInput(
+                attrs={"type": "datetime-local", "class": "form-control"},
+                format="%Y-%m-%dT%H:%M",
+            ),
+            "end_time": DateInput(
+                attrs={"type": "datetime-local", "class": "form-control"},
+                format="%Y-%m-%dT%H:%M",
+            ),
+            "student" : s2forms.Select2Widget(
+                attrs={"style": "width: 100%;"}
+            ),
+            "room": forms.Select(
+                attrs={"class": "form-control"}
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(EventForm, self).__init__(*args, **kwargs)
+        # input_formats to parse HTML5 datetime-local input to datetime field
+        self.fields["start_time"].input_formats = ("%Y-%m-%dT%H:%M",)
+        self.fields["end_time"].input_formats = ("%Y-%m-%dT%H:%M",)
+
+
+class AddMemberForm(forms.ModelForm):
+    class Meta:
+        model = EventMember
+        fields = ["student"]
+
 
 class InputMemberToEventForm(forms.Form):
     student = forms.ModelChoiceField(

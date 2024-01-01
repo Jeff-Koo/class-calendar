@@ -68,6 +68,15 @@
                                     <label for="message-text" class="col-form-label">End Date:</label>
                                     {{ form.end_time }}
                                 </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Student:</label>
+                                    {{ form.student }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Room:</label>
+                                    {{ form.room }}
+                                </div>
+                                {{ form.media.js }}
                             </div>
                             <div class="modal-footer">
                                 <button id="modalClose2" type="button" class="btn btn-danger">Close</button>
@@ -143,10 +152,17 @@
 
       var calendar = new FullCalendar.Calendar(calendarEl, {
         schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+        views: {
+          timeGridFiveDay: {
+            type: 'timeGrid',
+            duration: { days: 5 },
+            buttonText: '5 day'
+          }
+        },
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,timeGridWeek,resourceTimeGridDay,list'
+          right: 'dayGridMonth,timeGridWeek,timeGridFiveDay,resourceTimeGridDay'
         },
         slotLabelFormat: {
           hour: '2-digit',
@@ -159,11 +175,11 @@
         slotMaxTime: '21:00',
         nowIndicator: true,
         initialDate: today,
-        initialView: 'timeGridWeek',
+        initialView: 'resourceTimeGridDay',
         resources: [
-          { id: 'roomA', title: 'Room A' },
-          { id: 'roomB', title: 'Room B' },
-          { id: 'roomC', title: 'Room C' }
+          { id: 'A', title: 'Room A' },
+          { id: 'B', title: 'Room B' },
+          { id: 'C', title: 'Room C' }
         ],
         navLinks: true, // can click day/week names to navigate views
         selectable: true,
@@ -221,7 +237,7 @@
          
           modal.style.display = 'block';
         },
-        editable: true,
+        // editable: true, // turn on true can be draggable
         dayMaxEvents: true, // allow "more" link when too many events
         events: {{ events|safe }},
         // events: [
@@ -333,6 +349,10 @@
             }
         });
     }
+});
+
+$(document).ready(function() {
+    $('#id_student').select2({tags:true});
 });
 
 </script>
