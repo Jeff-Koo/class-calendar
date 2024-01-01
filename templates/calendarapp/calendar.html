@@ -103,6 +103,14 @@
                                     <p id="description_event_detail">
                                 </div>
                                 <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Student:</label>
+                                    <p id="student_event_detail">
+                                </div>
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Room:</label>
+                                    <p id="room_event_detail">
+                                </div>
+                                <div class="form-group">
                                     <label for="message-text" class="col-form-label">Start:</label>
                                     <p id="start_event_detail">
                                 </div>
@@ -149,14 +157,14 @@
         var calendar = new FullCalendar.Calendar(calendarEl, {
             schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
             views: {
-            timeGridFiveDay: {
-                type: 'timeGrid',
-                duration: { days: 5 },
-                buttonText: '5 day'
-            },
-            resourceTimeGridDay: {
-                titleFormat: { year: 'numeric', month: 'short', day: '2-digit', weekday: 'short' }
-            },
+                timeGridFiveDay: {
+                    type: 'timeGrid',
+                    duration: { days: 5 },
+                    buttonText: '5 day'
+                },
+                resourceTimeGridDay: {
+                    titleFormat: { year: 'numeric', month: 'short', day: '2-digit', weekday: 'short' }
+                },
             },
             headerToolbar: {
                 left: 'prev,next today',
@@ -193,6 +201,13 @@
                 document.getElementById('id_end_time').value = converterDataParaDjangoFormat(arg.end);
                 calendar.unselect()
             },
+            /*
+            eventContent: function (arg) {
+                return {
+                    html: '<h3>' + arg.event.title + '</h3><p>' + arg.event.extendedProps.description + '</p>'
+                };
+            },
+            */
             
             // THIS KEY WON'T WORK IN PRODUCTION!!!
             // To make your own Google API key, follow the directions here:
@@ -209,11 +224,14 @@
                 var end = formatDateTime(arg.event.end);
                 var description = arg.event.extendedProps.description || '';
                 var id = arg.event.id;
+                console.log('clicked: edit event', arg.event.extendedProps)
 
                 var modalInputEnd = document.getElementById('end_event_detail'); 
 
                 var modal = document.getElementById('detailModal')
                 var modalTitle = document.getElementById('title_event_detail'); 
+                var modalStudent = document.getElementById('student_event_detail'); 
+                var modalRoom = document.getElementById('room_event_detail'); 
                 var modalStart = document.getElementById('start_event_detail'); 
                 var modalEnd = document.getElementById('end_event_detail'); 
                 var modalDescripition = document.getElementById('description_event_detail'); 
@@ -228,6 +246,8 @@
                 nextDay.setAttribute("data-event-id-day", id);
                 
                 modalTitle.textContent = title;
+                modalStudent.textContent = arg.event.extendedProps.student;
+                modalRoom.textContent = arg.event.extendedProps.room;
                 modalStart.textContent = start;
                 modalEnd.textContent = end;
                 modalDescripition.textContent = description;

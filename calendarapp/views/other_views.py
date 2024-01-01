@@ -129,8 +129,10 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
                     "title": event.title,
                     "start": event.start_time.strftime("%Y-%m-%dT%H:%M:%S"),
                     "end": event.end_time.strftime("%Y-%m-%dT%H:%M:%S"),
-                    # "description": event.description,
+                    "description": event.description,
                     "resourceId": event.room,
+                    "room": "Room " + event.room,
+                    "student": event.student.name,
                 }
             )
         
