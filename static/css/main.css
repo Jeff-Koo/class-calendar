@@ -15539,7 +15539,7 @@ be a descendant of the grid when it is being dragged.
   -webkit-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
-  height: calc(10em + 14 * 2 * 3em);
+  height: 100%;
 }
 
 @media print {
