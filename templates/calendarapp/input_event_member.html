@@ -24,11 +24,23 @@
                         {% csrf_token %}
                         <div class="form-group col-lg-6">
                             <h4 class="py-2">Input Form</h4>
-                            {{ form.student }}
-                            {{ form.listOfDate }}
-                            {{ form.timeslot }}
-                            {{ form.room }}
-                            <button class="btn-input btn btn-kry-orange py-2">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Student:</label>
+                                {{ form.student }}
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Dates:</label>
+                                {{ form.listOfDate }}
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Time Slot:</label>
+                                {{ form.timeslot }}
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Room:</label>
+                                {{ form.room }}
+                            </div>
+                            <button class="btn-input btn btn-primary py-2">
                                 <i class="i-send"></i>
                                 <span>Submit</span>
                             </button>
