@@ -10,4 +10,3 @@
 .dockerignore
 docker-compose.yaml
 Dockerfile
-**/static
