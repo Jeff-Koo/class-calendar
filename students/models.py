@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import RegexValidator
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -7,7 +8,12 @@ from django.utils.translation import gettext_lazy as _
 class Student(models.Model):
 
     name = models.CharField(blank=False, null=False, unique=True)
-    phone = models.CharField(blank=True)
+    phone_regex = RegexValidator(
+        regex=r'^[0-9+\- ]+$',
+        message="Phone number can only contain digits (0-9), plus sign (+), hyphen (-), and space ( ), but not in consecutive sequence."
+    )
+    phone = models.CharField(blank=True, validators=[phone_regex])
+    memo = models.TextField(blank=True)
     date_joined = models.DateTimeField(_("Date Joined"), auto_now_add=True)
     last_updated = models.DateTimeField(_("Last Updated"), auto_now=True)
 
