@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpRequest
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 import calendar
+from students.forms import StudentForm
 from students.models import Student
 from calendarapp.models import Event
 
@@ -12,8 +14,10 @@ weekday_names = list(calendar.day_abbr)
 @login_required(login_url="signup")
 def all_student(request: HttpRequest) -> HttpResponse:
     student_list = Student.objects.all()
+    form = StudentForm
     context = { 
-        'student_list' : student_list, 
+        'form_student': form,
+        'student_list': student_list, 
     }
     return render(request, 'students/students_list.html', context)
 
@@ -24,9 +28,10 @@ def get_student(request: HttpRequest, pk: int) -> HttpResponse:
     try:
         student = Student.objects.get(pk=pk)
     except Student.DoesNotExist:
-        print("wrong, not such student")
+        print("wrong, no such student")
         return redirect('all_student')
     
+    form = StudentForm
     event_list = Event.objects.filter(student=student)
     events_with_dates = []
     for event in event_list:
@@ -44,9 +49,24 @@ def get_student(request: HttpRequest, pk: int) -> HttpResponse:
         events_with_dates.append(event_dict)
 
     context = { 
-        'student' : student,
-        'event_list' : events_with_dates,
+        'form_student': form,
+        'student': student,
+        'event_list': events_with_dates,
     }
     
     return render(request, 'students/students_detail.html', context)
+
+
+@login_required(login_url="signup")
+def add_student(request: HttpRequest):
+    forms = StudentForm()
+    if request.method == "POST":
+        forms = StudentForm(request.POST)
+        if forms.is_valid():
+            forms.save()
+            messages.success(request, 'Add Student Success!')
+            return redirect('all_student')
+    else:
+        messages.error(request, 'Something wrong!')
+        return redirect('all_student')
 
