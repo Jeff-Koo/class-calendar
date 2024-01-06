@@ -1,0 +1,61 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Event List{% endblock title %}
+
+{% block breadcrumb %}
+    <div>
+        <h1><i class="fa fa-user"></i> Students</h1>
+    </div>
+{% endblock breadcrumb %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <div class="table-responsive">
+                    <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer w-95">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-hover table-bordered dataTable no-footer" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+                                    <thead>
+                                        <tr role="row">
+                                            {% comment %} <th class="sorting_asc col-2" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending">ID</th> {% endcomment %}
+                                            <th class="sorting col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending">Student Name</th>
+                                            <th class="col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Phone: activate to sort column ascending">Phone Number</th>
+                                            {% comment %} <th class="sorting col-2" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Class: activate to sort column ascending">Grade</th> {% endcomment %}
+                                            <th class="col-2" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Attendence: activate to sort column ascending">Attendence Detail</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for student in student_list %}
+                                            <tr role="row" class="odd">
+                                                {% comment %} <td class="sorting_1">{{ forloop.counter }}</td> {% endcomment %}
+                                                <td>{{ student.name }}</td>
+                                                <td>{{ student.phone }}</td>
+                                                <td><a href={% url 'get_student' student.pk %}>View Attendence<a/></td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
+
+{% block extrascripts %}
+    <script type="text/javascript" src="{% static 'js/plugins/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/dataTables.bootstrap.min.js' %}"></script>
+    <script type="text/javascript">
+        $('#sampleTable').DataTable({
+            "pageLength": 25
+        });
+    </script>
+{% endblock extrascripts %}

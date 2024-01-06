@@ -24,5 +24,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
     path("", include("calendarapp.urls")),
+    path("students/", include("students.urls")),
     path("select2/", include("django_select2.urls")),
 ]
