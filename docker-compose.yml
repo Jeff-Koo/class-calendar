@@ -9,9 +9,10 @@ services:
     container_name: db_container
 
   calendar-app:
-    # use built image from docker repository 
     build: .
     image: event-calendar:latest
+    # use built image from docker repository 
+    # image: jeffkoo/event-calendar:production
     env_file:
       - .env
     ports: 
