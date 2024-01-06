@@ -55,7 +55,11 @@
     <script type="text/javascript" src="{% static 'js/plugins/dataTables.bootstrap.min.js' %}"></script>
     <script type="text/javascript">
         $('#sampleTable').DataTable({
-            "pageLength": 25
+            "pageLength": 25, 
+            "columnDefs": [
+                { "orderable": false, "targets": 1 },
+                { "orderable": false, "targets": 2 },
+            ]
         });
     </script>
 {% endblock extrascripts %}

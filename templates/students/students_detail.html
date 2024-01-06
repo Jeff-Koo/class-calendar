@@ -66,8 +66,12 @@
     <script type="text/javascript" src="{% static 'js/plugins/dataTables.bootstrap.min.js' %}"></script>
     <script type="text/javascript">
         $('#sampleTable').DataTable({
-            order: [[1, 'desc']],
-            "pageLength": 25
+            order: [[0, 'desc']],
+            "pageLength": 25,
+            "columnDefs": [
+                { "orderable": false, "targets": 1 },
+                { "orderable": false, "targets": 2 },
+            ]
         });
     </script>
 {% endblock extrascripts %}
