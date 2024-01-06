@@ -6,6 +6,8 @@
 **/.git
 **/.venv
 *.md
+.env
+.env.*
 .gitignore
 .dockerignore
 docker-compose.yaml

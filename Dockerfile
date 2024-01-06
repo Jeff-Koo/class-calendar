@@ -35,7 +35,7 @@ RUN pip install -r requirements.txt
 
 # 拷贝全部目录内容，注意原目录不要有 .venv，否则会覆盖上面创建的环境
 # Copy the directory content excluding .venv, otherwise it will overwrite the .venv created in the image
-COPY . /var/www/otp-django
+COPY . /var/www/event-calendar
 
 EXPOSE 8000
 
