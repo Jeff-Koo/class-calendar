@@ -42,6 +42,17 @@ def next_month(d):
     return month
 
 
+def get_event_color(event):
+    now = datetime.now()
+    event_color = "#3788d8" # default blue
+    if event.start_time < now:
+        if event.attendence:
+            event_color = "#2ec285" # green
+        else:
+            event_color = "#ff6b6b" # red
+    return event_color
+
+
 class CalendarView(LoginRequiredMixin, generic.ListView):
     login_url = "accounts:signin"
     model = Event
@@ -118,20 +129,12 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
     form_class = EventForm
 
     def get(self, request, *args, **kwargs):
-        now = datetime.now()
         forms = self.form_class()
         events = Event.objects.get_all_events()
         events_today = Event.objects.get_today_events()
         event_list = []
         for event in events:
-            
-            event_color = "#3788d8" # default blue
-            if event.start_time < now:
-                if event.attendence:
-                    event_color = "#2ec285" # green
-                else:
-                    event_color = "#ff6b6b" # red
-            
+            event_color = get_event_color(event)
             event_list.append(
                 {
                     "id": event.id,

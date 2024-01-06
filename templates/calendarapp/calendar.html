@@ -23,15 +23,15 @@
         <div class="tile row" style="height: max(calc(10em + 14 * 2 * 3em), 100%)">
             <div class="col-md-3 d-none d-md-block">
                 <div id="external-events">
-                    <h4 class="mb-4">Today Events</h4>
+                    <h4 class="mb-4">Today's Events</h4>
                     {% for event in events_today %}
-                        <div class="fc-event">
+                        <div class="fc-event" style="background-color: {{ event.event_color }};">
                             <h3>{{ event.student }}</h3>
-                            <p>From: {{ event.start_time }}</p>
-                            <p>To: {{ event.end_time }}</p>
+                            <p>From: {{ event.start_time|time }}</p>
+                            <p>To: {{ event.end_time|time }}</p>
                         </div>
                     {% empty %}
-                        <p>No Upcoming Events Today</p>
+                        <p>No Events Today</p>
                     {% endfor %}
                 </div>
             </div>
