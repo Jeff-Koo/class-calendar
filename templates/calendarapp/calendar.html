@@ -118,12 +118,15 @@
                                     <label for="message-text" class="col-form-label">End:</label>
                                     <p id="end_event_detail">
                                 </div>
+                                <div class="form-check">
+                                    <input id="toggle-attendence" data-event-id-week="" class="form-check-input" type="checkbox"/><label class="form-check-label" for="toggle-attendence">Tick Attendence</label>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button id="edit-event-button" data-event-id="" type="button" class="btn btn-secondary">Edit</button>
                                 <button id="delete-event-button" data-event-id="" type="button" class="btn btn-danger">Delete</button>
-                                <button id="add-to-next-week" data-event-id-week="" type="button" class="btn btn-success">Next Week</button>
-                                <button id="add-to-next-day" data-event-id-day="" type="button" class="btn btn-primary">Next Day</button>
+                                <button id="add-to-next-week" data-event-id-week="" type="button" class="btn btn-success d-none">Next Week</button>
+                                <button id="add-to-next-day" data-event-id-day="" type="button" class="btn btn-primary d-none">Next Day</button>
                             </div>
                         </form>
                     </div>
@@ -223,8 +226,8 @@
                 var start = formatDateTime(arg.event.start) ;
                 var end = formatDateTime(arg.event.end);
                 var description = arg.event.extendedProps.description || '';
+                var attendence = arg.event.extendedProps.attendence;
                 var id = arg.event.id;
-                console.log('clicked: edit event', arg.event.extendedProps)
 
                 var modalInputEnd = document.getElementById('end_event_detail'); 
 
@@ -235,11 +238,13 @@
                 var modalStart = document.getElementById('start_event_detail'); 
                 var modalEnd = document.getElementById('end_event_detail'); 
                 var modalDescripition = document.getElementById('description_event_detail'); 
+                var toggleAttendence = document.getElementById("toggle-attendence");
                 var editButton = document.getElementById("edit-event-button");
                 var deleteButton = document.getElementById("delete-event-button");
                 var nextWeek = document.getElementById("add-to-next-week");
                 var nextDay = document.getElementById("add-to-next-day");
 
+                toggleAttendence.setAttribute("data-event-id", id);
                 editButton.setAttribute("data-event-id", id);
                 deleteButton.setAttribute("data-event-id", id);
                 nextWeek.setAttribute("data-event-id-week", id);
@@ -251,6 +256,7 @@
                 modalStart.textContent = start;
                 modalEnd.textContent = end;
                 modalDescripition.textContent = description;
+                toggleAttendence.checked = attendence;
                 
                 modal.style.display = 'block';
             },
@@ -306,6 +312,33 @@
     document.getElementById('edit-event-button').addEventListener('click', function() {
         const eventId = this.getAttribute('data-event-id');
         window.open(`/admin/calendarapp/event/${eventId}/change/`, "_blank");
+    });
+
+    document.getElementById('toggle-attendence').addEventListener('click', function() {
+        const eventId = this.getAttribute('data-event-id');
+        
+        if (!this.checked) {
+            if (!confirm('Are you sure you want to cancel the attendance?')) {
+                // Prevent the checkbox state from changing
+                event.preventDefault();
+                return;
+            }
+        }
+        
+        $.ajax({
+            url: `/toggle_attendence/${eventId}/`,
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function(response) {
+                // alert(response.message);
+                window.location.reload();
+            },
+            error: function(xhr, status, error) {
+                alert('Error!');
+            }
+        });
     });
 
     document.getElementById('delete-event-button').addEventListener('click', function() {

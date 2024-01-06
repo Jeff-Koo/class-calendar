@@ -133,6 +133,7 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
                     "resourceId": event.room,
                     "room": "Room " + event.room,
                     "student": event.student.name,
+                    "attendence": 1 if event.attendence else 0,
                 }
             )
         
@@ -153,6 +154,16 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
         context = {"form": forms}
         return render(request, self.template_name, context)
 
+
+def toggle_attendence(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    if request.method == 'POST':
+        current_attendence = event.attendence
+        event.attendence = not event.attendence
+        event.save()
+        return JsonResponse({'message': 'Sucess!'})
+    else:
+        return JsonResponse({'message': 'Error!'}, status=400)
 
 
 def delete_event(request, event_id):
