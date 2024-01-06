@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpRequest
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from datetime import datetime
 
 import calendar
 from students.forms import StudentForm
@@ -10,6 +11,16 @@ from calendarapp.models import Event
 
 
 weekday_names = list(calendar.day_abbr)
+
+def get_event_color_student_detail(event):
+    now = datetime.now()
+    event_color = "" # default none
+    if event.start_time < now:
+        if event.attendence:
+            event_color = "#2ec285" # green
+        else:
+            event_color = "#ff6b6b" # red
+    return event_color
 
 @login_required(login_url="signup")
 def all_student(request: HttpRequest) -> HttpResponse:
@@ -46,6 +57,7 @@ def get_student(request: HttpRequest, pk: int) -> HttpResponse:
             "event_date_weekday": weekday_names[event_date.weekday()], 
             "event_start_time": event_start_time.strftime("%I:%M %p"),
             "event_end_time": event_end_time.strftime("%I:%M %p"),
+            "event_color": get_event_color_student_detail(event),
         }
         events_with_dates.append(event_dict)
 

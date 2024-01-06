@@ -43,7 +43,7 @@
                                                     <td>{{ row.event_date }} ({{ row.event_date_weekday }})</td>
                                                     <td>{{ row.event_start_time }}</td>
                                                     <td>{{ row.event_end_time }}</td>
-                                                    <td>{{ row.event.attendence }}</td>
+                                                    <td style="background-color: {{ row.event_color }};">{{ row.event.attendence }}</td>
                                                 </tr>
                                             {% endfor %}
                                         </tbody>
