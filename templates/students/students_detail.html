@@ -5,10 +5,10 @@
 
 {% block breadcrumb %}
     <div>
-        <h1><i class="fa fa-user"></i> Student</h1>
+        <h1><i class="fa fa-user m-2"></i> {{ student.name }}</h1>
     </div>
     <div class="">
-        <button id="new-student-button" type="button" class="btn btn-primary">Add New Student</button>
+        <button id="edit-student-button" type="button" class="btn btn-primary">Edit Student</button>
     </div>
 {% endblock breadcrumb %}
 
@@ -17,10 +17,6 @@
     <div class="col-md-12">
         <div class="tile">
             <div class="tile-body">
-                <h5 class="form-group">
-                    Name: 
-                    {{ student.name }}
-                </h5>
                 <div class="form-group">
                     Phone: 
                     {{ student.phone }}
@@ -61,6 +57,45 @@
         </div>
     </div>
 </div>
+
+{# Edit Student Form #}
+<div class="modal fade show" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white" id="exampleModalLongTitle">Add New Student</h5>
+                <button id="modalClose6" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" action="{% url 'edit_student' pk=student.pk %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Student Name:</label>
+                        {{ form_edit.name }}
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Phone:</label>
+                        {{ form_edit.phone }}
+                    </div>
+                    {% comment %}
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Grade:</label>
+                        {{ form_edit.grade }}
+                    </div>
+                    {% endcomment %}
+                </div>
+                <div class="modal-footer">
+                    <button id="modalClose7" type="button" class="btn btn-danger">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{# End of Edit Student Form #}
+
 {% include 'students/add_student_modal.html' %}
 {% endblock content %}
 
@@ -75,6 +110,25 @@
                 { "orderable": false, "targets": 1 },
                 { "orderable": false, "targets": 2 },
             ]
+        });
+    </script>
+    <script>
+        // modal form for creating new students
+        document.getElementById('edit-student-button').addEventListener('click', function() {
+            console.log('clicked: edit student')
+            var modal = document.getElementById('editStudentModal')
+            modal.style.display = 'block'
+        });
+    
+        const closeBtn6 = document.getElementById('modalClose6');
+        const closeBtn7 = document.getElementById('modalClose7');
+        closeBtn6.addEventListener('click',()=>{
+            const modal = document.getElementById('editStudentModal')
+            modal.style.display = 'none';
+        });
+        closeBtn7.addEventListener('click',()=>{
+            const modal = document.getElementById('editStudentModal')
+            modal.style.display = 'none';
         });
     </script>
 {% endblock extrascripts %}
