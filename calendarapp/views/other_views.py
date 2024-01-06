@@ -1,5 +1,5 @@
 # cal/views.py
-
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.views import generic
@@ -139,7 +139,8 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
         context = {
             "form": forms, 
             "events": event_list,
-            "events_month": events_month
+            "events_month": events_month,
+            "scheduler_license_key": settings.SCHEDULER_LICENSE_KEY,
         }
         return render(request, self.template_name, context)
 

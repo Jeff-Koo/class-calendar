@@ -34,6 +34,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = _get('SECRET_KEY')
 
+# LICENSE KEY for using resourceTimeGridDay in FullCalendar.js
+SCHEDULER_LICENSE_KEY = _get('SCHEDULER_LICENSE_KEY')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = _get('DEBUG', False, bool)
 DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
