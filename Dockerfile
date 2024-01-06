@@ -5,16 +5,6 @@ FROM python:3.8-slim-buster
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Installing the Python MySQL client still requires compilation (hence
-# libmysqlclient-dev, python3-dev, and build-essential).
-# RUN set -ex; \
-#     apk update && apk add --no-cache gcc postgresql-dev \
-#     python3-dev musl-dev python3 python3-dev py3-pip \
-#     libffi-dev jpeg-dev libpng-dev  ;
-# ENV LANG en_US.UTF-8
-
-# RUN echo rustc --version
-
 # upgrade pip
 RUN pip3 install --upgrade pip
 

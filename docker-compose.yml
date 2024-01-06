@@ -14,8 +14,6 @@ services:
     image: event-calendar:latest
     env_file:
       - .env
-    volumes: 
-      - ./static/:/var/www/event-calendar/static
     ports: 
       - 8000:8000
     container_name: django_container
