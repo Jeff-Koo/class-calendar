@@ -89,8 +89,8 @@
             <div class="modal fade show" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
-                        <div class="modal-header bg-primary">
-                            <h5 class="modal-title text-white" id="title_event_detail"></h5>
+                        <div class="modal-header">
+                            <h5 class="modal-title text-white" id="student_event_detail"></h5>
                             <button id="modalDetailClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -98,14 +98,6 @@
                         <form method="">
                             {% csrf_token %}
                             <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Description:</label>
-                                    <p id="description_event_detail">
-                                </div>
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Student:</label>
-                                    <p id="student_event_detail">
-                                </div>
                                 <div class="form-group">
                                     <label for="message-text" class="col-form-label">Room:</label>
                                     <p id="room_event_detail">
@@ -227,17 +219,19 @@
                 var end = formatDateTime(arg.event.end);
                 var description = arg.event.extendedProps.description || '';
                 var attendence = arg.event.extendedProps.attendence;
+                var event_color = arg.event.extendedProps.event_color;
                 var id = arg.event.id;
 
                 var modalInputEnd = document.getElementById('end_event_detail'); 
 
                 var modal = document.getElementById('detailModal')
-                var modalTitle = document.getElementById('title_event_detail'); 
+                var modalHeader = modal.querySelector('.modal-header');
+                // var modalTitle = document.getElementById('title_event_detail'); 
+                // var modalDescripition = document.getElementById('description_event_detail'); 
                 var modalStudent = document.getElementById('student_event_detail'); 
                 var modalRoom = document.getElementById('room_event_detail'); 
                 var modalStart = document.getElementById('start_event_detail'); 
                 var modalEnd = document.getElementById('end_event_detail'); 
-                var modalDescripition = document.getElementById('description_event_detail'); 
                 var toggleAttendence = document.getElementById("toggle-attendence");
                 var editButton = document.getElementById("edit-event-button");
                 var deleteButton = document.getElementById("delete-event-button");
@@ -250,14 +244,15 @@
                 nextWeek.setAttribute("data-event-id-week", id);
                 nextDay.setAttribute("data-event-id-day", id);
                 
-                modalTitle.textContent = title;
+                // modalTitle.textContent = title;
+                // modalDescripition.textContent = description;
                 modalStudent.textContent = arg.event.extendedProps.student;
                 modalRoom.textContent = arg.event.extendedProps.room;
                 modalStart.textContent = start;
                 modalEnd.textContent = end;
-                modalDescripition.textContent = description;
                 toggleAttendence.checked = attendence;
                 
+                modalHeader.style.backgroundColor = event_color;
                 modal.style.display = 'block';
             },
             // editable: true, // turn on true can be draggable
@@ -284,6 +279,14 @@
             //     start: '2020-09-28'
             //   }
             // ]
+            eventContent: function(arg) {
+                let divElement = document.createElement('b');
+                divElement.className = "fc-event-main fc-event-title";
+                divElement.innerHTML = arg.event.extendedProps.student
+
+                let arrayOfDomNodes = [ divElement ]
+                return { domNodes: arrayOfDomNodes }
+            }
         });
 
         calendar.render();

@@ -118,11 +118,20 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
     form_class = EventForm
 
     def get(self, request, *args, **kwargs):
+        now = datetime.now()
         forms = self.form_class()
         events = Event.objects.get_all_events()
         events_month = Event.objects.get_running_events()
         event_list = []
         for event in events:
+            
+            event_color = "#3788d8" # default blue
+            if event.start_time < now:
+                if event.attendence:
+                    event_color = "#2ec285" # green
+                else:
+                    event_color = "#ff6b6b" # red
+            
             event_list.append(
                 {
                     "id": event.id,
@@ -130,10 +139,13 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
                     "start": event.start_time.strftime("%Y-%m-%dT%H:%M:%S"),
                     "end": event.end_time.strftime("%Y-%m-%dT%H:%M:%S"),
                     "description": event.description,
-                    "resourceId": event.room,
                     "room": "Room " + event.room,
+                    "event_color": event_color,
                     "student": event.student.name,
                     "attendence": 1 if event.attendence else 0,
+                    # more data for eventContent in calendar
+                    "resourceId": event.room,
+                    "backgroundColor": event_color,
                 }
             )
         
