@@ -121,7 +121,7 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
         now = datetime.now()
         forms = self.form_class()
         events = Event.objects.get_all_events()
-        events_month = Event.objects.get_running_events()
+        events_today = Event.objects.get_today_events()
         event_list = []
         for event in events:
             
@@ -152,7 +152,7 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
         context = {
             "form": forms, 
             "events": event_list,
-            "events_month": events_month,
+            "events_today": events_today,
             "scheduler_license_key": settings.SCHEDULER_LICENSE_KEY,
         }
         return render(request, self.template_name, context)

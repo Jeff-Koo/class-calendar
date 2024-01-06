@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, time
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.urls import reverse
@@ -27,6 +27,18 @@ class EventManager(models.Manager):
             end_time__gte=datetime.now().date(),
         ).order_by("start_time")
         return running_events
+
+    def get_today_events(self):
+        start_of_today = datetime.combine(datetime.today(), time(0, 0, 0, 0))
+        end_of_today = datetime.combine(datetime.today(), time(23, 59, 59, 999999))
+        
+        today_events = Event.objects.filter(
+            is_active=True,
+            is_deleted=False,
+            start_time__gte=start_of_today,
+            end_time__lte=end_of_today,
+        ).order_by("start_time")
+        return today_events
 
 
 class Event(EventAbstract):

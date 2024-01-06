@@ -23,16 +23,15 @@
         <div class="tile row" style="height: max(calc(10em + 14 * 2 * 3em), 100%)">
             <div class="col-md-3 d-none d-md-block">
                 <div id="external-events">
-                    <h4 class="mb-4">Running Events</h4>
-                    {% for event in events_month %}
+                    <h4 class="mb-4">Today Events</h4>
+                    {% for event in events_today %}
                         <div class="fc-event">
-                            <h3>{{ event.title }}</h3>
-                            <p>{{ event.description }}</p>
+                            <h3>{{ event.student }}</h3>
                             <p>From: {{ event.start_time }}</p>
                             <p>To: {{ event.end_time }}</p>
                         </div>
                     {% empty %}
-                        <p>No Running Events Found</p>
+                        <p>No Upcoming Events Today</p>
                     {% endfor %}
                 </div>
             </div>
@@ -52,6 +51,7 @@
                         <form method="post">
                             {% csrf_token %}
                             <div class="modal-body">
+                                {% comment %}
                                 <div class="form-group">
                                     <label for="recipient-name" class="col-form-label">Event Title:</label>
                                     {{ form.title }}
@@ -60,6 +60,7 @@
                                     <label for="message-text" class="col-form-label">Description:</label>
                                     {{ form.description }}
                                 </div>
+                                {% endcomment %}
                                 <div class="form-group">
                                     <label for="message-text" class="col-form-label">Start Date:</label>
                                     {{ form.start_time }}
@@ -214,10 +215,10 @@
             eventClick: function(arg) {
             
                 console.log('clicked: edit event')
-                var title = arg.event.title;
+                // var title = arg.event.title;
+                // var description = arg.event.extendedProps.description || '';
                 var start = formatDateTime(arg.event.start) ;
                 var end = formatDateTime(arg.event.end);
-                var description = arg.event.extendedProps.description || '';
                 var attendence = arg.event.extendedProps.attendence;
                 var event_color = arg.event.extendedProps.event_color;
                 var id = arg.event.id;
