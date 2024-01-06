@@ -1,0 +1,24 @@
+services:
+  postgres-db:
+    restart: on-failure:10
+    image: postgres:16
+    volumes:
+      - ../postgres-event-calendar/data/db:/var/lib/postgresql/data
+    env_file:
+      - .env.db
+    container_name: db_container
+
+  calendar-app:
+    # use built image from docker repository 
+    build: .
+    image: event-calendar:latest
+    env_file:
+      - .env
+    volumes: 
+      - ./static/:/var/www/event-calendar/static
+    ports: 
+      - 8000:8000
+    container_name: django_container
+    command: sh docker-entrypoint.sh
+    depends_on:
+      - postgres-db

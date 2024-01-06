@@ -26,3 +26,11 @@ python manage.py createsuperuser
 ```
 python manage.py runserver
 ```
+
+## Maybe using Docker
+```
+docker compose build
+```
+```
+docker compose up -d
+```
