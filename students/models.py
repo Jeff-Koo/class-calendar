@@ -10,7 +10,7 @@ class Student(models.Model):
     name = models.CharField(blank=False, null=False, unique=True)
     phone_regex = RegexValidator(
         regex=r'^[0-9+\- ]+$',
-        message="Phone number can only contain digits (0-9), plus sign (+), hyphen (-), and space ( ), but not in consecutive sequence."
+        message="Phone number can only contain digits (0-9), plus sign (+), hyphen (-), and space ( )."
     )
     phone = models.CharField(blank=True, validators=[phone_regex])
     memo = models.TextField(blank=True)

@@ -3,6 +3,8 @@ from django.http import HttpResponse, HttpRequest
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from datetime import datetime
+from django.utils.safestring import mark_safe
+from django.utils.html import strip_tags
 
 import calendar
 from students.forms import StudentForm
@@ -76,12 +78,20 @@ def add_student(request: HttpRequest):
     form = StudentForm()
     if request.method == "POST":
         form = StudentForm(request.POST)
+        
+        errors = form.errors.as_data()
+        formatted_errors = {}
+        for field, error_list in errors.items():
+            formatted_errors[field] = strip_tags(str(error_list[0]))[2:-2]
+        error_message = str("<br>".join(formatted_errors.values()))
+        messages.error(request, mark_safe(error_message))
+        
         if form.is_valid():
             form.save()
             messages.success(request, 'Add Student Success!')
             return redirect('all_student')
         else:
-            messages.error(request, 'Error: Maybe there is student has the same name!')
+            messages.error(request, 'Error: Save Failed!')
             return redirect('all_student')
     else:
         messages.error(request, 'Something wrong!')
@@ -98,12 +108,20 @@ def edit_student(request: HttpRequest, pk: int):
     
     if request.method == "POST":
         form = StudentForm(request.POST, instance = student)
+        
+        errors = form.errors.as_data()
+        formatted_errors = {}
+        for field, error_list in errors.items():
+            formatted_errors[field] = strip_tags(str(error_list[0]))[2:-2]
+        error_message = str("<br>".join(formatted_errors.values()))
+        messages.error(request, mark_safe(error_message))
+        
         if form.is_valid():
             form.save()
             messages.success(request, 'Update Student Info Success!')
             return redirect('get_student', pk=pk)
         else:
-            messages.error(request, 'Error: Maybe there is student has the same name!')
+            messages.error(request, 'Error: Save Failed!')
             return redirect('get_student', pk=pk)
     else:
         messages.error(request, 'Something wrong!')
