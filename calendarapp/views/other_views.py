@@ -163,8 +163,27 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
     def post(self, request, *args, **kwargs):
         forms = self.form_class(request.POST)
         if forms.is_valid():
-            form = forms.save(commit=False)
-            form.save()
+            start_time = forms.cleaned_data["start_time"]
+            end_time = forms.cleaned_data["end_time"]
+            room = forms.cleaned_data['room']
+            student_input = forms.cleaned_data['student']
+            student, student_created = Student.objects.get_or_create(
+                name=student_input,
+            )
+            start_timeonly_str = start_time.strftime("%H:%M")
+            
+            try:
+                Event.objects.create(
+                    title = f"{student.name} - {start_timeonly_str} (Room {room}) ",  # Update the title field,
+                    description = "",
+                    start_time=start_time,
+                    end_time=end_time,
+                    student=student,
+                    room=room,
+                )
+            except:
+                messages.error(request, 'the same Student is already in the same Class!')
+                return redirect("calendarapp:calendar")
             return redirect("calendarapp:calendar")
         context = {"form": forms}
         return render(request, self.template_name, context)

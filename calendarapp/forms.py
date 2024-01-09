@@ -24,37 +24,31 @@ ROOM_CHOICES = (
 )
 
 
-class EventForm(ModelForm):
-    class Meta:
-        model = Event
-        fields = ["title", "start_time", "end_time", "student", "room", "description"]
-        # datetime-local is a HTML5 input type
-        widgets = {
-            "title": forms.TextInput(
-                attrs={"class": "form-control", "placeholder": "Enter event title"}
-            ),
-            "description": forms.Textarea(
-                attrs={
-                    "rows": "5",
-                    "class": "form-control",
-                    "placeholder": "Enter event description",
-                }
-            ),
-            "start_time": DateInput(
-                attrs={"type": "datetime-local", "class": "form-control"},
-                format="%Y-%m-%dT%H:%M",
-            ),
-            "end_time": DateInput(
-                attrs={"type": "datetime-local", "class": "form-control"},
-                format="%Y-%m-%dT%H:%M",
-            ),
-            "student" : s2forms.Select2Widget(
-                attrs={"style": "width: 100%;"}
-            ),
-            "room": forms.Select(
-                attrs={"class": "form-control"}
-            ),
-        }
+class EventForm(forms.Form):
+    student = forms.ModelChoiceField(
+        label='Student Name', 
+        queryset=Student.objects.all(),
+        widget=s2forms.Select2Widget(
+            attrs={'style': 'width: 100%;'}
+        ),
+    )
+    start_time = forms.DateTimeField(
+        widget=DateInput(
+            attrs={"type": "datetime-local", "class": "form-control"},
+            format="%Y-%m-%dT%H:%M",
+        ),
+    )
+    end_time = forms.DateTimeField(
+        widget=DateInput(
+            attrs={"type": "datetime-local", "class": "form-control"},
+            format="%Y-%m-%dT%H:%M",
+        ),
+    )
+    room = forms.ChoiceField(
+        label='Room', 
+        choices=ROOM_CHOICES, 
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
 
     def __init__(self, *args, **kwargs):
         super(EventForm, self).__init__(*args, **kwargs)
