@@ -181,10 +181,12 @@
                 console.log('clicked: create event')
                 console.log(arg.start)
                 console.log(arg.end)
+                console.log(arg.resource.id)
                 var modal = document.getElementById('eventModal')
                 modal.style.display = 'block'
                 document.getElementById('id_start_time').value = converterDataParaDjangoFormat(arg.start);
                 document.getElementById('id_end_time').value = converterDataParaDjangoFormat(arg.end);
+                document.getElementById('id_room').value = arg.resource.id;
                 calendar.unselect()
             },
             /*
