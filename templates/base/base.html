@@ -155,11 +155,9 @@
                 </div>
             </div>
             <ul class="app-menu">
-                {% comment %}
                 <li>
                     <a class="app-menu__item" href="{% url 'dashboard' %}"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span></a>
                 </li>
-                {% endcomment %}
                 <li>
                     <a class="app-menu__item {% if '/calender' in request.path %}active{% endif %}" href="{% url 'calendarapp:calendar' %}"><i class="app-menu__icon fa fa-calendar"></i><span class="app-menu__label">Calendar</span></a>
                 </li>

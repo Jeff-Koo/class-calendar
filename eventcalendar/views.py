@@ -15,6 +15,7 @@ class DashboardView(LoginRequiredMixin, View):
         latest_events = Event.objects.filter().order_by("-id")[:10]
         context = {
             "total_event": events.count(),
+            "events": events,
             "running_events": running_events,
             "latest_events": latest_events,
         }

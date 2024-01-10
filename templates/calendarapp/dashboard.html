@@ -8,14 +8,17 @@
         <h1><i class="fa fa-dashboard"></i> Dashboard</h1>
         <p>Event Dashboard</p>
     </div>
+    {% comment %}
     <ul class="app-breadcrumb breadcrumb">
         <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
         <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
     </ul>
+    {% endcomment %}
 {% endblock breadcrumb %}
 
 {% block content %}
 <div class="row">
+    {% comment %}
     <div class="col-md-6 col-lg-3">
         <div class="widget-small primary coloured-icon">
             <i class="icon fa fa-files-o fa-3x"></i>
@@ -52,6 +55,7 @@
             </div>
         </div>
     </div>
+    {% endcomment %}
     <div class="col-md-12">
         <div class="tile">
             <div class="tile-body">
@@ -69,7 +73,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for event in latest_events %}
+                                        {% for event in events %}
                                             <tr role="row" class="odd">
                                                 <td class="sorting_1">{{ forloop.counter }}</td>
                                                 <td>{{ event.title }}</td>
