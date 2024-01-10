@@ -49,7 +49,6 @@ def get_student(request: HttpRequest, pk: int) -> HttpResponse:
     event_list = Event.objects.filter(student=student)
     events_with_dates = []
     for event in event_list:
-        # I want to get teh date from event.start_time
         event_date = event.start_time.date()
         event_start_time = event.start_time.time()
         event_end_time = event.end_time.time()

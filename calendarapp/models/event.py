@@ -28,6 +28,16 @@ class EventManager(models.Manager):
         ).order_by("start_time")
         return running_events
 
+    def get_future_events(self):
+        start_of_today = datetime.combine(datetime.today(), time(0, 0, 0, 0))
+        
+        future_events = Event.objects.filter(
+            is_active=True,
+            is_deleted=False,
+            start_time__gte=start_of_today,
+        ).order_by("start_time")
+        return future_events
+
     def get_today_events(self):
         start_of_today = datetime.combine(datetime.today(), time(0, 0, 0, 0))
         end_of_today = datetime.combine(datetime.today(), time(23, 59, 59, 999999))

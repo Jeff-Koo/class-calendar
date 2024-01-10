@@ -44,7 +44,7 @@
                                         <tbody>
                                             {% for row in event_list %}
                                                 <tr role="row" class="odd">
-                                                    <td>{{ row.event_date }} ({{ row.event_date_weekday }})</td>
+                                                    <td>{{ row.event_date }}</td>
                                                     <td>{{ row.event_start_time }}</td>
                                                     <td>{{ row.event_end_time }}</td>
                                                     <td style="background-color: {{ row.event_color }};">{{ row.event.attendence }}</td>
@@ -110,11 +110,13 @@
 {% block extrascripts %}
     <script type="text/javascript" src="{% static 'js/plugins/jquery.dataTables.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/plugins/dataTables.bootstrap.min.js' %}"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.7/sorting/date-eu.js"></script>
     <script type="text/javascript">
         $('#sampleTable').DataTable({
             order: [[0, 'desc']],
             "pageLength": 25,
             "columnDefs": [
+                { "orderable": true,  "targets": 0, "type": "date-eu" },
                 { "orderable": false, "targets": 1 },
                 { "orderable": false, "targets": 2 },
             ]
