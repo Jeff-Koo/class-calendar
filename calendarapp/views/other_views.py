@@ -214,17 +214,23 @@ def edit_event(request, event_id):
     # print("parsed_body:", parsed_body)
     event = get_object_or_404(Event, id=event_id)
     if request.method == 'POST':
+        # change the time base on the drag and drop
         event.start_time = parsed_body['start']
         event.end_time = parsed_body['end']
         event.room = parsed_body['room']
         event.attendence = parsed_body['attendence']
+        
+        # update the title
+        start_datetime_obj = datetime.strptime(event.start_time, "%Y-%m-%d %H:%M:%S")
+        start_timeonly_str = start_datetime_obj.strftime("%H:%M")
+        event.title = f"{event.student.name} - {start_timeonly_str} (Room {event.room}) "
         try:
             event.save()
             return JsonResponse({'message': 'Event success moved.'})
         except:
-            return JsonResponse({'message': 'same person in same timeslot !'}, status=400)
+            return JsonResponse({'message': 'Same person in Same timeslot!'}, status=400)
     else:
-        return JsonResponse({'message': 'Error: Something Wrong. Try Again later'}, status=400)
+        return JsonResponse({'message': 'Error: Something Wrong. Try Again Later'}, status=400)
 
 def next_week(request, event_id):
     event = get_object_or_404(Event, id=event_id)
