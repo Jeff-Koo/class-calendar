@@ -204,9 +204,27 @@ def delete_event(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     if request.method == 'POST':
         event.delete()
-        return JsonResponse({'message': 'Event sucess delete.'})
+        return JsonResponse({'message': 'Event success delete.'})
     else:
         return JsonResponse({'message': 'Error!'}, status=400)
+
+def edit_event(request, event_id):
+    """ mainly handle drag drop event """
+    parsed_body = request.POST.dict()
+    # print("parsed_body:", parsed_body)
+    event = get_object_or_404(Event, id=event_id)
+    if request.method == 'POST':
+        event.start_time = parsed_body['start']
+        event.end_time = parsed_body['end']
+        event.room = parsed_body['room']
+        event.attendence = parsed_body['attendence']
+        try:
+            event.save()
+            return JsonResponse({'message': 'Event success moved.'})
+        except:
+            return JsonResponse({'message': 'same person in same timeslot !'}, status=400)
+    else:
+        return JsonResponse({'message': 'Error: Something Wrong. Try Again later'}, status=400)
 
 def next_week(request, event_id):
     event = get_object_or_404(Event, id=event_id)

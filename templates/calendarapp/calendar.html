@@ -248,7 +248,6 @@
                 modalHeader.style.backgroundColor = event_color;
                 modal.style.display = 'block';
             },
-            // editable: true, // turn on true can be draggable
             dayMaxEvents: true, // allow "more" link when too many events
             events: {{ events|safe }},
             // events: [
@@ -279,7 +278,41 @@
 
                 let arrayOfDomNodes = [ divElement ]
                 return { domNodes: arrayOfDomNodes }
-            }
+            },
+            editable: true, // turn on true can be draggable
+            eventDrop: function(info) {
+                // console.log("drop to info.event: ", info.event )
+                // console.log("info.event.extendedProps.student: ", info.event.extendedProps.student )
+                // console.log("eventId: ", info.event._def.publicId )
+                // console.log("room: ", info.event._def.resourceIds[0] )
+                // alert(info.event.extendedProps.student + " was dropped on \n" + info.event.start + "\n and room ", info.event.extendedProps.room);
+                
+                if (!confirm("Are you sure about this change?")) {
+                    info.revert();
+                    event.preventDefault();
+                }
+                
+                $.ajax({
+                    url: `/edit_event/${info.event._def.publicId}/`,
+                    type: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        start: converterDataParaDjangoFormat(info.event.start),
+                        end: converterDataParaDjangoFormat(info.event.end),
+                        room: info.event._def.resourceIds[0],
+                        attendence: 0,
+                    },
+                    success: function(response) {
+                        alert(response.message);
+                        // window.location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        // alert('Error!');
+                        alert(xhr.responseJSON.message);
+                        info.revert();
+                    }
+                });
+            },
         });
 
         calendar.render();
