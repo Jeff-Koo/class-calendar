@@ -67,6 +67,7 @@
                                     <thead>
                                         <tr role="row">
                                             <th class="sorting_desc col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Date</th>
+                                            <th class="col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Weekday: activate to sort column ascending">Weekday</th>
                                             <th class="col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Start Time: activate to sort column ascending">Start</th>
                                             <th class="col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="End Time: activate to sort column ascending">End</th>
                                             <th class="col-2" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Attendence: activate to sort column ascending">Attendence</th>
@@ -76,6 +77,7 @@
                                         {% for row in all_events_with_dates %}
                                             <tr role="row" class="odd">
                                                 <td>{{ row.event_date }}</td>
+                                                <td>({{ row.event_date_weekday }})</td>
                                                 <td>{{ row.event_start_time }}</td>
                                                 <td>{{ row.event_end_time }}</td>
                                                 <td style="background-color: {{ row.event_color }};">{{ row.event.attendence }}</td>
@@ -106,6 +108,7 @@
                 { "orderable": true,  "targets": 0, "type": "date-eu" },
                 { "orderable": false, "targets": 1 },
                 { "orderable": false, "targets": 2 },
+                { "orderable": false, "targets": 3 },
             ]
         });
     </script>

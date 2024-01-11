@@ -24,7 +24,7 @@ def get_event_color_student_detail(event):
             event_color = "#ff6b6b" # red
     return event_color
 
-@login_required(login_url="signup")
+@login_required(login_url="accounts:signin")
 def all_student(request: HttpRequest) -> HttpResponse:
     student_list = Student.objects.all()
     form_student = StudentForm
@@ -36,7 +36,7 @@ def all_student(request: HttpRequest) -> HttpResponse:
 
 
 # view student detail with attendence on his/her lessons
-@login_required(login_url="signup")
+@login_required(login_url="accounts:signin")
 def get_student(request: HttpRequest, pk: int) -> HttpResponse:
     try:
         student = Student.objects.get(pk=pk)
@@ -72,7 +72,7 @@ def get_student(request: HttpRequest, pk: int) -> HttpResponse:
     return render(request, 'students/students_detail.html', context)
 
 
-@login_required(login_url="signup")
+@login_required(login_url="accounts:signin")
 def add_student(request: HttpRequest):
     form = StudentForm()
     if request.method == "POST":
@@ -97,7 +97,7 @@ def add_student(request: HttpRequest):
         return redirect('all_student')
 
 
-@login_required(login_url="signup")
+@login_required(login_url="accounts:signin")
 def edit_student(request: HttpRequest, pk: int):
     try:
         student = Student.objects.get(pk=pk)

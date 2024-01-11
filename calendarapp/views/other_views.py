@@ -69,7 +69,7 @@ class CalendarView(LoginRequiredMixin, generic.ListView):
         return context
 
 
-@login_required(login_url="signup")
+@login_required(login_url="signin")
 def create_event(request):
     form = EventForm(request.POST or None)
     if request.POST and form.is_valid():
@@ -93,7 +93,7 @@ class EventEdit(generic.UpdateView):
     template_name = "event.html"
 
 
-@login_required(login_url="signup")
+@login_required(login_url="signin")
 def event_details(request, event_id):
     event = Event.objects.get(id=event_id)
     eventmember = EventMember.objects.filter(event=event)
@@ -175,7 +175,7 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
             try:
                 Event.objects.create(
                     title = f"{student.name} - {start_timeonly_str} (Room {room}) ",  # Update the title field,
-                    description = "",
+                    description = "nothing",
                     start_time=start_time,
                     end_time=end_time,
                     student=student,
@@ -224,6 +224,7 @@ def edit_event(request, event_id):
         start_datetime_obj = datetime.strptime(event.start_time, "%Y-%m-%d %H:%M:%S")
         start_timeonly_str = start_datetime_obj.strftime("%H:%M")
         event.title = f"{event.student.name} - {start_timeonly_str} (Room {event.room}) "
+        event.description = "nothing"
         try:
             event.save()
             return JsonResponse({'message': 'Event success moved.'})
@@ -342,7 +343,7 @@ def multi_input_member_to_event(request):
                         room = room,
                         student = student,
                         title = f"{student.name} - {start_timeonly_str} (Room {room}) ",  # Update the title field,
-                        description = "",
+                        description = "nothing",
                         attendence = False,
                     )
                 except:
