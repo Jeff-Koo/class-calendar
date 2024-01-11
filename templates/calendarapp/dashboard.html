@@ -8,6 +8,10 @@
         <h1><i class="fa fa-dashboard"></i> Dashboard</h1>
         <p>Event Dashboard</p>
     </div>
+    <div>
+        <button id="optionFutureEvent" class="btn btn-primary active" onclick="toggleEventRows('future-events-row', 'all-events-row')">Future Events</button>
+        <button id="optionAllEvent" class="btn btn-primary" onclick="toggleEventRows('all-events-row', 'future-events-row')">All Events</button>
+    </div>
     {% comment %}
     <ul class="app-breadcrumb breadcrumb">
         <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
@@ -74,8 +78,20 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {# Events from Today on to Future #}
+                                        {% for row in future_events_with_dates %}
+                                            <tr role="row" class="odd future-events-row">
+                                                <td>{{ row.event_date }}</td>
+                                                <td>({{ row.event_date_weekday }})</td>
+                                                <td>{{ row.event_start_time }}</td>
+                                                <td>{{ row.event_end_time }}</td>
+                                                <td style="background-color: {{ row.event_color }};">{{ row.event.attendence }}</td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        {# All Events from Past to Future #}
                                         {% for row in all_events_with_dates %}
-                                            <tr role="row" class="odd">
+                                            <tr role="row" class="odd all-events-row d-none">
                                                 <td>{{ row.event_date }}</td>
                                                 <td>({{ row.event_date_weekday }})</td>
                                                 <td>{{ row.event_start_time }}</td>
@@ -111,5 +127,23 @@
                 { "orderable": false, "targets": 3 },
             ]
         });
+    </script>
+
+    <script>
+        /* function for toggle between all-events and future-events */
+        function toggleEventRows(showClassPrefix, hideClassPrefix){
+            const showRows = document.querySelectorAll(`.${showClassPrefix}`);
+            const hideRows = document.querySelectorAll(`.${hideClassPrefix}`);
+            showRows.forEach(function(row) {
+                row.classList.remove("d-none");
+            });
+            hideRows.forEach(function(row) {
+                row.classList.add("d-none");
+            });
+
+            // toggle 'active' class for the button
+            document.getElementById('optionAllEvent').classList.toggle('active');
+            document.getElementById('optionFutureEvent').classList.toggle('active');
+        }
     </script>
 {% endblock extrascripts %}
