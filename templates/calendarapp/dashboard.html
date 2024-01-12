@@ -71,7 +71,7 @@
                                 <table class="table table-hover table-bordered dataTable no-footer" id="FutureEventsDataTable" role="grid" aria-describedby="FutureEventsDataTable_info">
                                     <thead>
                                         <tr role="row">
-                                            <th class="sorting_desc col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Date</th>
+                                            <th class="sorting col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Date</th>
                                             <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Weekday: activate to sort column ascending">Weekday</th>
                                             <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Start Time: activate to sort column ascending">Start</th>
                                             <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="End Time: activate to sort column ascending">End</th>
@@ -143,7 +143,7 @@
     <script src="https://cdn.datatables.net/plug-ins/1.13.7/sorting/date-eu.js"></script>
     <script type="text/javascript">
         $('#FutureEventsDataTable').DataTable({
-            order: [[0, 'desc']],
+            order: [[0, 'asc']],
             "pageLength": 25,
             "columnDefs": [
                 { "orderable": true,  "targets": 0, "type": "date-eu" },
