@@ -7,8 +7,8 @@ from django.urls import reverse
 @admin.register(get_user_model())
 class UserAdmin(auth_admin.UserAdmin):
     list_display = [
-        'date_joined',
-        'last_login',
+        'username',
+        'email',
     ]
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password')}),
