@@ -18,7 +18,8 @@ class EventAdmin(admin.ModelAdmin):
         "room",
         "attendence",
     ]
-    list_filter = ["is_active", "is_deleted"]
+    list_filter = ["room", "attendence", "student"]
+    list_editable = ["attendence"]
     search_fields = ["title"]
     autocomplete_fields = ['student', ]
 
