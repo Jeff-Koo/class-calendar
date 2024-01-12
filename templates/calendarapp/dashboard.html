@@ -75,7 +75,8 @@
                                             <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Weekday: activate to sort column ascending">Weekday</th>
                                             <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Start Time: activate to sort column ascending">Start</th>
                                             <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="End Time: activate to sort column ascending">End</th>
-                                            <th class="col-2" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Attendence: activate to sort column ascending">Attendence</th>
+                                            <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Student: activate to sort column ascending">Student</th>
+                                            <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Attendence: activate to sort column ascending">Attendence</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -85,6 +86,7 @@
                                                 <td>({{ row.event_date_weekday }})</td>
                                                 <td>{{ row.event_start_time }}</td>
                                                 <td>{{ row.event_end_time }}</td>
+                                                <td>{{ row.event.student }}</td>
                                                 <td style="background-color: {{ row.event_color }};">{{ row.event.attendence }}</td>
                                             </tr>
                                         {% endfor %}
@@ -107,7 +109,8 @@
                                             <th class="col-1" tabindex="0" aria-controls="AllEventsDataTable" rowspan="1" colspan="1" aria-label="Weekday: activate to sort column ascending">Weekday</th>
                                             <th class="col-1" tabindex="0" aria-controls="AllEventsDataTable" rowspan="1" colspan="1" aria-label="Start Time: activate to sort column ascending">Start</th>
                                             <th class="col-1" tabindex="0" aria-controls="AllEventsDataTable" rowspan="1" colspan="1" aria-label="End Time: activate to sort column ascending">End</th>
-                                            <th class="col-2" tabindex="0" aria-controls="AllEventsDataTable" rowspan="1" colspan="1" aria-label="Attendence: activate to sort column ascending">Attendence</th>
+                                            <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Student: activate to sort column ascending">Student</th>
+                                            <th class="col-1" tabindex="0" aria-controls="AllEventsDataTable" rowspan="1" colspan="1" aria-label="Attendence: activate to sort column ascending">Attendence</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -117,6 +120,7 @@
                                                 <td>({{ row.event_date_weekday }})</td>
                                                 <td>{{ row.event_start_time }}</td>
                                                 <td>{{ row.event_end_time }}</td>
+                                                <td>{{ row.event.student }}</td>
                                                 <td style="background-color: {{ row.event_color }};">{{ row.event.attendence }}</td>
                                             </tr>
                                         {% endfor %}
@@ -146,6 +150,7 @@
                 { "orderable": false, "targets": 1 },
                 { "orderable": false, "targets": 2 },
                 { "orderable": false, "targets": 3 },
+                { "orderable": false, "targets": 4 },
             ]
         });
 
@@ -157,6 +162,7 @@
                 { "orderable": false, "targets": 1 },
                 { "orderable": false, "targets": 2 },
                 { "orderable": false, "targets": 3 },
+                { "orderable": false, "targets": 4 },
             ]
         });
     </script>
