@@ -9,8 +9,8 @@
         <p>Event Dashboard</p>
     </div>
     <div>
-        <button id="optionFutureEvent" class="btn btn-primary active" onclick="toggleEventRows('future-events-row', 'all-events-row')">Future Events</button>
-        <button id="optionAllEvent" class="btn btn-primary" onclick="toggleEventRows('all-events-row', 'future-events-row')">All Events</button>
+        <button id="optionFutureEvent" class="btn btn-primary active" onclick="toggleEventTable('future-events-table', 'all-events-table')">Future Events</button>
+        <button id="optionAllEvent" class="btn btn-primary" onclick="toggleEventTable('all-events-table', 'future-events-table')">All Events</button>
     </div>
     {% comment %}
     <ul class="app-breadcrumb breadcrumb">
@@ -63,22 +63,22 @@
     <div class="col-md-12">
         <div class="tile">
             <div class="tile-body">
-                <div class="table-responsive">
+                {# Table for Events from Today to Future #}
+                <div class="table-responsive future-events-table">
                     <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer w-95">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-hover table-bordered dataTable no-footer" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+                                <table class="table table-hover table-bordered dataTable no-footer" id="FutureEventsDataTable" role="grid" aria-describedby="FutureEventsDataTable_info">
                                     <thead>
                                         <tr role="row">
-                                            <th class="sorting_desc col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Date</th>
-                                            <th class="col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Weekday: activate to sort column ascending">Weekday</th>
-                                            <th class="col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Start Time: activate to sort column ascending">Start</th>
-                                            <th class="col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="End Time: activate to sort column ascending">End</th>
-                                            <th class="col-2" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Attendence: activate to sort column ascending">Attendence</th>
+                                            <th class="sorting_desc col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Date</th>
+                                            <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Weekday: activate to sort column ascending">Weekday</th>
+                                            <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Start Time: activate to sort column ascending">Start</th>
+                                            <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="End Time: activate to sort column ascending">End</th>
+                                            <th class="col-2" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Attendence: activate to sort column ascending">Attendence</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {# Events from Today on to Future #}
                                         {% for row in future_events_with_dates %}
                                             <tr role="row" class="odd future-events-row">
                                                 <td>{{ row.event_date }}</td>
@@ -88,10 +88,31 @@
                                                 <td style="background-color: {{ row.event_color }};">{{ row.event.attendence }}</td>
                                             </tr>
                                         {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                        {# All Events from Past to Future #}
+                {# Table for all Events from Past to Future #}
+                <div class="table-responsive all-events-table d-none">
+                    <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer w-95">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-hover table-bordered dataTable no-footer" id="AllEventsDataTable" role="grid" aria-describedby="AllEventsDataTable_info">
+                                    <thead>
+                                        <tr role="row">
+                                            <th class="sorting_desc col-1" tabindex="0" aria-controls="AllEventsDataTable" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Date</th>
+                                            <th class="col-1" tabindex="0" aria-controls="AllEventsDataTable" rowspan="1" colspan="1" aria-label="Weekday: activate to sort column ascending">Weekday</th>
+                                            <th class="col-1" tabindex="0" aria-controls="AllEventsDataTable" rowspan="1" colspan="1" aria-label="Start Time: activate to sort column ascending">Start</th>
+                                            <th class="col-1" tabindex="0" aria-controls="AllEventsDataTable" rowspan="1" colspan="1" aria-label="End Time: activate to sort column ascending">End</th>
+                                            <th class="col-2" tabindex="0" aria-controls="AllEventsDataTable" rowspan="1" colspan="1" aria-label="Attendence: activate to sort column ascending">Attendence</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                                         {% for row in all_events_with_dates %}
-                                            <tr role="row" class="odd all-events-row d-none">
+                                            <tr role="row" class="odd all-events-row">
                                                 <td>{{ row.event_date }}</td>
                                                 <td>({{ row.event_date_weekday }})</td>
                                                 <td>{{ row.event_start_time }}</td>
@@ -117,7 +138,18 @@
     <script type="text/javascript" src="{% static 'js/plugins/dataTables.bootstrap.min.js' %}"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.13.7/sorting/date-eu.js"></script>
     <script type="text/javascript">
-        $('#sampleTable').DataTable({
+        $('#FutureEventsDataTable').DataTable({
+            order: [[0, 'desc']],
+            "pageLength": 25,
+            "columnDefs": [
+                { "orderable": true,  "targets": 0, "type": "date-eu" },
+                { "orderable": false, "targets": 1 },
+                { "orderable": false, "targets": 2 },
+                { "orderable": false, "targets": 3 },
+            ]
+        });
+
+        $('#AllEventsDataTable').DataTable({
             order: [[0, 'desc']],
             "pageLength": 25,
             "columnDefs": [
@@ -131,15 +163,11 @@
 
     <script>
         /* function for toggle between all-events and future-events */
-        function toggleEventRows(showClassPrefix, hideClassPrefix){
-            const showRows = document.querySelectorAll(`.${showClassPrefix}`);
-            const hideRows = document.querySelectorAll(`.${hideClassPrefix}`);
-            showRows.forEach(function(row) {
-                row.classList.remove("d-none");
-            });
-            hideRows.forEach(function(row) {
-                row.classList.add("d-none");
-            });
+        function toggleEventTable(showClassPrefix, hideClassPrefix){
+            const showTable = document.querySelector(`.${showClassPrefix}`);
+            const hideTable = document.querySelector(`.${hideClassPrefix}`);
+            showTable.classList.remove("d-none");
+            hideTable.classList.add("d-none");
 
             // toggle 'active' class for the button
             document.getElementById('optionAllEvent').classList.toggle('active');
