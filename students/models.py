@@ -8,11 +8,7 @@ from django.utils.translation import gettext_lazy as _
 class Student(models.Model):
 
     name = models.CharField(blank=False, null=False, unique=True)
-    phone_regex = RegexValidator(
-        regex=r'^[0-9+\- ]+$',
-        message="Phone number can only contain digits (0-9), plus sign (+), hyphen (-), and space ( )."
-    )
-    phone = models.CharField(blank=True, validators=[phone_regex])
+    phone = models.CharField(blank=True, null=True)
     memo = models.TextField(blank=True)
     date_joined = models.DateTimeField(_("Date Joined"), auto_now_add=True)
     last_updated = models.DateTimeField(_("Last Updated"), auto_now=True)

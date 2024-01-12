@@ -14,16 +14,8 @@ class UserAdmin(auth_admin.UserAdmin):
         (None, {'fields': ('username', 'email', 'password')}),
         (
             'Permissions',
-            {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')},
+            {'fields': ('is_active', 'is_staff', 'is_superuser')},
         ),
-        (
-            'Important dates',
-            {'fields': ('date_joined', 'last_login')},
-        ),
-    )
-    readonly_fields = (
-        'date_joined',
-        'last_login',
     )
     ordering = ['-date_joined']
     search_fields = ['email', 'full_name', 'username']

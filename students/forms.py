@@ -34,11 +34,4 @@ class StudentForm(ModelForm):
             if Student.objects.filter(name__iexact=name).exists():
                 raise ValidationError("Student with name %(name)s already exists." % {"name": name})
         return name
-    
-    def clean_phone(self):
-        phone = self.cleaned_data.get('phone')
-        if not re.match(r'^[0-9+\- ]+$', phone):
-            raise ValidationError(
-                "Phone number can only contain digits (0-9), plus sign (+), hyphen (-), and space ( )")
-        return phone
 
