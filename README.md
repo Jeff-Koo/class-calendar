@@ -32,7 +32,7 @@ When DEBUG=False, use `--insecure` flag for getting the static files
 python manage.py runserver --insecure
 ```
 
-## Using Docker to Run
+## Using Docker to Build and Run
 build Docker image
 ```
 docker compose build calendar-app
@@ -41,3 +41,8 @@ start Docker containers for application
 ```
 docker compose up -d
 ```
+
+## Using Docker for Deploy
+1. ensure Docker Desktop Application is running in Windows
+2. edit the `startDockerCalendar.bat` file, set the `folder path` and the image repositor
+3. double clikc `startDockerCalendar.bat` and wait until it finish
