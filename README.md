@@ -42,7 +42,7 @@ start Docker containers for application
 docker compose up -d
 ```
 
-## Using Docker for Deploy
+## Pulling Docker Image from Repository and Startup
 1. ensure Docker Desktop Application is running in Windows
-2. edit the `startDockerCalendar.bat` file, set the `folder path` and the image repositor
-3. double clikc `startDockerCalendar.bat` and wait until it finish
+2. edit the `startDockerCalendar.bat` file, set the `folder path` and the image repository
+3. double click `startDockerCalendar.bat` and wait until it finish
