@@ -5,4 +5,4 @@ docker compose up -d
 timeout 10
 docker restart django_container
 timeout 15
-start "firefox.exe" http://127.0.0.1:8000
+start http://127.0.0.1:8000
