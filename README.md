@@ -27,6 +27,11 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
+When DEBUG=False, use `--insecure` flag for getting the static files
+```
+python manage.py runserver --insecure
+```
+
 ## Using Docker to Run
 build Docker image
 ```
