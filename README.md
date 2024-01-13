@@ -27,10 +27,12 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-## Maybe using Docker
+## Using Docker to Run
+build Docker image
 ```
-docker compose build
+docker compose build calendar-app
 ```
+start Docker containers for application
 ```
 docker compose up -d
 ```
