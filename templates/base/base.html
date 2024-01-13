@@ -178,10 +178,10 @@
                 </li>
                 {% endcomment %}
                 <li>
-                    <a class="app-menu__item {% if '/multi-input-event-member' in request.path %}active{% endif %}" href="{% url 'calendarapp:multi-input-event-member' %}"><i class="app-menu__icon fa fa-calendar"></i><span class="app-menu__label">Input</span></a>
+                    <a class="app-menu__item {% if '/multi-input-event-member' in request.path %}active{% endif %}" href="{% url 'calendarapp:multi-input-event-member' %}"><i class="app-menu__icon fa fa-pencil-square-o"></i><span class="app-menu__label">Input</span></a>
                 </li>
                 <li>
-                    <a class="app-menu__item {% if '/students' in request.path %}active{% endif %}" href="{% url 'all_student' %}"><i class="app-menu__icon fa fa-file-code-o"></i><span class="app-menu__label">Students</span></a>
+                    <a class="app-menu__item {% if '/students' in request.path %}active{% endif %}" href="{% url 'all_student' %}"><i class="app-menu__icon fa fa-user"></i><span class="app-menu__label">Students</span></a>
                 </li>
             </ul>
         </aside>

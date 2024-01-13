@@ -74,7 +74,7 @@ class InputMemberToEventForm(forms.Form):
     listOfDate = forms.CharField(
         widget=forms.Textarea(attrs={
             'class': 'form-control border-radius-0 mb-2', 
-            'placeholder': 'e.g.\n1/12/2023\n15/12/2023\n1/1/2024', 
+            'placeholder': 'e.g.\n2023/12/1\n2023/12/15\n2024/1/1', 
             'rows': 20, 
         }),
         required=True

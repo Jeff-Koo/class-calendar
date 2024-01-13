@@ -54,7 +54,7 @@ def get_student(request: HttpRequest, pk: int) -> HttpResponse:
         event_end_time = event.end_time.time()
         event_dict = {
             "event": event,
-            "event_date": event_date.strftime("%d/%m/%Y"),
+            "event_date": event_date.strftime("%Y/%m/%d"),
             "event_date_weekday": weekday_names[event_date.weekday()], 
             "event_start_time": event_start_time.strftime("%I:%M %p"),
             "event_end_time": event_end_time.strftime("%I:%M %p"),
