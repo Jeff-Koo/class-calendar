@@ -1,4 +1,4 @@
-cd D:\english\path\to\project-folder\event-calendar
+cd <path\to\event-calendar>
 docker compose down
 docker image pull <docker-repository>/<image>:<tag>
 docker compose up -d

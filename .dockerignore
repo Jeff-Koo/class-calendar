@@ -5,6 +5,8 @@
 **/.github
 **/.git
 **/.venv
+**/.env-example
+*.bat
 *.md
 .env
 .env.*
