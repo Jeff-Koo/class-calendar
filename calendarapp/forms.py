@@ -5,10 +5,24 @@ from django import forms
 from django_select2 import forms as s2forms
 
 
-TIMESLOT_CHOICES = (
-    ('09:00 ~ 10:00', '09:00 ~ 10:00 for Mon to Fri / 09:30 ~ 10:30 for Sat'),
-    ('10:00 ~ 11:00', '10:00 ~ 11:00 for Mon to Fri / 10:30 ~ 11:30 for Sat'),
-    ('11:00 ~ 12:00', '11:00 ~ 12:00 for Mon to Fri / 11:30 ~ 12:30 for Sat'),
+TIMESLOT_CHOICES_NORMAL = (
+    ('-------------', '-------------'),
+    ('09:00 ~ 10:00', '09:00 ~ 10:00'),
+    ('10:00 ~ 11:00', '10:00 ~ 11:00'),
+    ('11:00 ~ 12:00', '11:00 ~ 12:00'),
+    ('13:00 ~ 14:00', '13:00 ~ 14:00'),
+    ('14:00 ~ 15:00', '14:00 ~ 15:00'),
+    ('15:00 ~ 16:00', '15:00 ~ 16:00'),
+    ('16:00 ~ 17:00', '16:00 ~ 17:00'),
+    ('17:00 ~ 18:00', '17:00 ~ 18:00'),
+    ('18:00 ~ 19:00', '18:00 ~ 19:00'),
+)
+
+TIMESLOT_CHOICES_SAT = (
+    ('-------------', '-------------'),
+    ('09:30 ~ 10:30', '09:30 ~ 10:30'),
+    ('10:30 ~ 11:30', '10:30 ~ 11:30'),
+    ('11:30 ~ 12:30', '11:30 ~ 12:30'),
     ('13:00 ~ 14:00', '13:00 ~ 14:00'),
     ('14:00 ~ 15:00', '14:00 ~ 15:00'),
     ('15:00 ~ 16:00', '15:00 ~ 16:00'),
@@ -79,9 +93,39 @@ class InputMemberToEventForm(forms.Form):
         }),
         required=True
     )
-    timeslot = forms.ChoiceField(
-        label='Start Time to End time', 
-        choices=TIMESLOT_CHOICES, 
+    timeslot0 = forms.ChoiceField(
+        label='Start Time to End time for Monday', 
+        choices=TIMESLOT_CHOICES_NORMAL, 
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+    timeslot1 = forms.ChoiceField(
+        label='Start Time to End time for Tuesday', 
+        choices=TIMESLOT_CHOICES_NORMAL, 
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+    timeslot2 = forms.ChoiceField(
+        label='Start Time to End time for Wednesday', 
+        choices=TIMESLOT_CHOICES_NORMAL, 
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+    timeslot3 = forms.ChoiceField(
+        label='Start Time to End time for Thursday', 
+        choices=TIMESLOT_CHOICES_NORMAL, 
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+    timeslot4 = forms.ChoiceField(
+        label='Start Time to End time for Friday', 
+        choices=TIMESLOT_CHOICES_NORMAL, 
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+    timeslot5 = forms.ChoiceField(
+        label='Start Time to End time for Saturday', 
+        choices=TIMESLOT_CHOICES_SAT, 
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+    timeslot6 = forms.ChoiceField(
+        label='Start Time to End time for Sunday', 
+        choices=TIMESLOT_CHOICES_NORMAL, 
         widget=forms.Select(attrs={"class": "form-control"})
     )
     room = forms.ChoiceField(

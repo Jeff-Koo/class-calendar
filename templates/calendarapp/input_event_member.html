@@ -32,13 +32,43 @@
                                 {{ form.student }}
                                 {% comment %} <button id="new-student-button" type="button" class="btn btn-primary">+</button> {% endcomment %}
                             </div>
-                            <div class="form-group">
-                                <label for="recipient-name" class="col-form-label">Dates:</label>
-                                {{ form.listOfDate }}
-                            </div>
-                            <div class="form-group">
-                                <label for="recipient-name" class="col-form-label">Time Slot:</label>
-                                {{ form.timeslot }}
+                            <div class="row">
+                                <div class="col"> 
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Dates:</label>
+                                        {{ form.listOfDate }}
+                                    </div>
+                                </div>
+                                <div class="col"> 
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Monday:</label>
+                                        {{ form.timeslot0 }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Tuesday:</label>
+                                        {{ form.timeslot1 }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Webnesday:</label>
+                                        {{ form.timeslot2 }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Thursday:</label>
+                                        {{ form.timeslot3 }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Friday:</label>
+                                        {{ form.timeslot4 }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Saturday: </label>
+                                        {{ form.timeslot5 }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Sunday:</label>
+                                        {{ form.timeslot6 }}
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="recipient-name" class="col-form-label">Room:</label>
