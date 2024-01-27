@@ -373,9 +373,11 @@ def multi_input_member_to_event(request):
                 })
                 
             # create the lesson if not exist
+            trying_event = None
             try:
                 with transaction.atomic():
                     for formattedEvent in arrayOfFormattedEvents:
+                        trying_event = formattedEvent
                         event = Event.objects.create(
                             start_time = formattedEvent['start_time'],
                             end_time = formattedEvent['end_time'],
@@ -386,7 +388,10 @@ def multi_input_member_to_event(request):
                             attendence = False,
                         )
             except:
-                messages.error(request, 'the same Student is already in the same Class!')
+                date = trying_event['start_time'][:10]
+                start_time = trying_event['start_time'][11:16]
+                end_time = trying_event['end_time'][11:16]
+                messages.error(request, f'{student} has already in class on {date} {start_time} ~ {end_time}')
                 form = InputMemberToEventForm(
                     initial={
                         'student': student_input,
