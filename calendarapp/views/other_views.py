@@ -18,7 +18,10 @@ from calendarapp.utils import Calendar
 from calendarapp.forms import EventForm, AddMemberForm, InputMemberToEventForm
 from django.contrib import messages
 from django.utils.html import strip_tags
+from django.db import transaction
 
+
+weekday_names = list(calendar.day_abbr)
 
 def get_date(req_day):
     if req_day:
@@ -273,26 +276,18 @@ def multi_input_member_to_event(request):
         messages.error(request, mark_safe(error_message))
         
         if form.is_valid():
-            
-            # the following timeslot need changes for Sat Morning Class
-            SAT_MORNING_TIMESLOT = [
-                datetime.strptime("09:00", '%H:%M').time(),
-                datetime.strptime("10:00", '%H:%M').time(),
-                datetime.strptime("11:00", '%H:%M').time(),
-            ]
-            
             student_input = form.cleaned_data['student']
             listOfDate = form.cleaned_data['listOfDate']
-            timeslot = form.cleaned_data['timeslot']
+            timeslots = [
+                form.cleaned_data['timeslot0'],  # Monday
+                form.cleaned_data['timeslot1'],  # Tuesday
+                form.cleaned_data['timeslot2'],  # Wednesday
+                form.cleaned_data['timeslot3'],  # Thursday
+                form.cleaned_data['timeslot4'],  # Friday
+                form.cleaned_data['timeslot5'],  # Saturday
+                form.cleaned_data['timeslot6'],  # Sunday
+            ]
             room = form.cleaned_data['room']
-            
-            # split timeslot 
-            start_timeonly_str, end_timeonly_str = timeslot.split(' ~ ')
-            
-            # format the time string
-            start_timeonly = datetime.strptime(start_timeonly_str, '%H:%M').time()
-            end_timeonly = datetime.strptime(end_timeonly_str, '%H:%M').time()
-            
             
             # create student if not exists
             student, student_created = Student.objects.get_or_create(
@@ -303,11 +298,11 @@ def multi_input_member_to_event(request):
             arrayOfDate = listOfDate.splitlines()
             arrayOfDate = [date.strip() for date in arrayOfDate if date.strip()]
             
-            arrayOfFormatedDate = []
+            arrayOfFormattedDate = []
             for date in arrayOfDate:
                 try:
                     # format the date strings
-                    arrayOfFormatedDate.append(datetime.strptime(date, '%Y/%m/%d').date())
+                    arrayOfFormattedDate.append(datetime.strptime(date, '%Y/%m/%d').date())
                 except:
                     messages.error(request, 'something wrong with the input date!')
                     form = InputMemberToEventForm(
@@ -315,48 +310,98 @@ def multi_input_member_to_event(request):
                             'student': student_input,
                             'room': room,
                             'listOfDate': listOfDate,
-                            'timeslot': timeslot,
+                            'timeslot0': timeslots[0],
+                            'timeslot1': timeslots[1],
+                            'timeslot2': timeslots[2],
+                            'timeslot3': timeslots[3],
+                            'timeslot4': timeslots[4],
+                            'timeslot5': timeslots[5],
+                            'timeslot6': timeslots[6],
                         }
                     )
                     return render(request, 'calendarapp/input_event_member.html', {'form': form})
             
+            
+            arrayOfFormattedEvents = []
 
-            for date in arrayOfFormatedDate:
-                # Combine the date and time into a datetime object
-                start_time = datetime.combine(date, start_timeonly)
-                end_time = datetime.combine(date, end_timeonly)
-
-                # if Sat, special timeslot for morning class (+30 minutes to start and end)
-                if date.weekday() == 5 and  start_timeonly in SAT_MORNING_TIMESLOT:
-                    start_time = start_time + timedelta(minutes=30)
-                    end_time = end_time + timedelta(minutes=30)
+            for date in arrayOfFormattedDate:
                 
-                # Format the combined datetime as a string
-                formatted_start_time = start_time.strftime('%Y-%m-%dT%H:%M:%S')
-                formatted_end_time = end_time.strftime('%Y-%m-%dT%H:%M:%S')
+                # get weekday of each date
+                weekday = date.weekday()
                 
-                # create the lesson if not exist
+                # Get the corresponding timeslot variable based on the weekday
+                timeslot_value = timeslots[weekday]
+                
+                # split timeslot , may trigger error for the default empty choice
+                # may check in frontend, without storing any entry in database
                 try:
-                    event = Event.objects.create(
-                        start_time = formatted_start_time,
-                        end_time = formatted_end_time,
-                        room = room,
-                        student = student,
-                        title = f"{student.name} - {start_timeonly_str} (Room {room}) ",  # Update the title field,
-                        description = "nothing",
-                        attendence = False,
-                    )
+                    start_timeonly_str, end_timeonly_str = timeslot_value.split(' ~ ')
                 except:
-                    messages.error(request, 'the same Student is already in the same Class!')
+                    messages.error(request, f'Missing input for {date} ({weekday_names[weekday]})')
                     form = InputMemberToEventForm(
                         initial={
                             'student': student_input,
                             'room': room,
                             'listOfDate': listOfDate,
-                            'timeslot': timeslot,
+                            'timeslot0': timeslots[0],
+                            'timeslot1': timeslots[1],
+                            'timeslot2': timeslots[2],
+                            'timeslot3': timeslots[3],
+                            'timeslot4': timeslots[4],
+                            'timeslot5': timeslots[5],
+                            'timeslot6': timeslots[6],
                         }
                     )
                     return render(request, 'calendarapp/input_event_member.html', {'form': form})
+                
+                # format the time string
+                start_timeonly = datetime.strptime(start_timeonly_str, '%H:%M').time()
+                end_timeonly = datetime.strptime(end_timeonly_str, '%H:%M').time()
+                
+                # Combine the date and time into a datetime object
+                start_time = datetime.combine(date, start_timeonly)
+                end_time = datetime.combine(date, end_timeonly)
+                
+                # Format the combined datetime as a string
+                formatted_start_time = start_time.strftime('%Y-%m-%dT%H:%M:%S')
+                formatted_end_time = end_time.strftime('%Y-%m-%dT%H:%M:%S')
+                
+                arrayOfFormattedEvents.append({
+                    'start_time': formatted_start_time,
+                    'end_time': formatted_end_time,
+                    'title': f"{student.name} - {start_timeonly_str} (Room {room}) ",  # Update the title field
+                })
+                
+            # create the lesson if not exist
+            try:
+                with transaction.atomic():
+                    for formattedEvent in arrayOfFormattedEvents:
+                        event = Event.objects.create(
+                            start_time = formattedEvent['start_time'],
+                            end_time = formattedEvent['end_time'],
+                            room = room,
+                            student = student,
+                            title = formattedEvent['title'],
+                            description = "nothing",
+                            attendence = False,
+                        )
+            except:
+                messages.error(request, 'the same Student is already in the same Class!')
+                form = InputMemberToEventForm(
+                    initial={
+                        'student': student_input,
+                        'room': room,
+                        'listOfDate': listOfDate,
+                        'timeslot0': timeslots[0],
+                        'timeslot1': timeslots[1],
+                        'timeslot2': timeslots[2],
+                        'timeslot3': timeslots[3],
+                        'timeslot4': timeslots[4],
+                        'timeslot5': timeslots[5],
+                        'timeslot6': timeslots[6],
+                    }
+                )
+                return render(request, 'calendarapp/input_event_member.html', {'form': form})
                 
                 # try to add the student to the lesson 
                 # try:
