@@ -72,7 +72,7 @@ class CalendarView(LoginRequiredMixin, generic.ListView):
         return context
 
 
-@login_required(login_url="signin")
+@login_required(login_url="accounts:signin")
 def create_event(request):
     form = EventForm(request.POST or None)
     if request.POST and form.is_valid():
@@ -96,7 +96,7 @@ class EventEdit(generic.UpdateView):
     template_name = "event.html"
 
 
-@login_required(login_url="signin")
+@login_required(login_url="accounts:signin")
 def event_details(request, event_id):
     event = Event.objects.get(id=event_id)
     eventmember = EventMember.objects.filter(event=event)
