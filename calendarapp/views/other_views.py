@@ -294,7 +294,6 @@ def multi_input_member_to_event(request):
                 name=student_input,
             )
             
-            
             arrayOfDate = listOfDate.splitlines()
             arrayOfDate = [date.strip() for date in arrayOfDate if date.strip()]
             
@@ -323,7 +322,6 @@ def multi_input_member_to_event(request):
             
             
             arrayOfFormattedEvents = []
-
             for date in arrayOfFormattedDate:
                 
                 # get weekday of each date
@@ -332,12 +330,10 @@ def multi_input_member_to_event(request):
                 # Get the corresponding timeslot variable based on the weekday
                 timeslot_value = timeslots[weekday]
                 
-                # split timeslot , may trigger error for the default empty choice
-                # may check in frontend, without storing any entry in database
                 try:
                     start_timeonly_str, end_timeonly_str = timeslot_value.split(' ~ ')
                 except:
-                    messages.error(request, f'Missing input for {date} ({weekday_names[weekday]})')
+                    messages.error(request, f'Missing timeslot for {date} ({weekday_names[weekday]})')
                     form = InputMemberToEventForm(
                         initial={
                             'student': student_input,
@@ -366,15 +362,17 @@ def multi_input_member_to_event(request):
                 formatted_start_time = start_time.strftime('%Y-%m-%dT%H:%M:%S')
                 formatted_end_time = end_time.strftime('%Y-%m-%dT%H:%M:%S')
                 
+                # store the formatted event, later create events with transaction.atomic
                 arrayOfFormattedEvents.append({
                     'start_time': formatted_start_time,
                     'end_time': formatted_end_time,
                     'title': f"{student.name} - {start_timeonly_str} (Room {room}) ",  # Update the title field
                 })
                 
-            # create the lesson if not exist
+            # keep the trying event for detail error message
             trying_event = None
             try:
+                # ensure atomic: create multiple events ( fail all if one fails )
                 with transaction.atomic():
                     for formattedEvent in arrayOfFormattedEvents:
                         trying_event = formattedEvent
