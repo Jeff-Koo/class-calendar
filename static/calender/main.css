@@ -354,7 +354,7 @@ When it's NOT activated, the fc-button classes won't even be in the DOM.
 
   }
 .fc .fc-scrollgrid-liquid {
-    height: calc(14 * 2 * 3em);
+    height: calc(22 * 3em + 2em);
   }
 .fc .fc-scrollgrid-section { /* a <tr> */
     height: 1px /* better than 0, for firefox */
