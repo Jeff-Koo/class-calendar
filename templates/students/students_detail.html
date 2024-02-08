@@ -40,6 +40,7 @@
                                                 <th class="col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="End Time: activate to sort column ascending">End</th>
                                                 {% comment %} <th class="sorting col-2" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Grade: activate to sort column ascending">Grade</th> {% endcomment %}
                                                 <th class="col-2" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Attendence: activate to sort column ascending">Attendence</th>
+                                                <th class="col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Delete">Delete</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -50,6 +51,11 @@
                                                     <td>{{ row.event_start_time }}</td>
                                                     <td>{{ row.event_end_time }}</td>
                                                     <td style="background-color: {{ row.event_color }};">{{ row.event.attendence }}</td>
+                                                    <td>
+                                                        {% if row.event.room == 'OFF' %}
+                                                            <a href="{% url 'calendarapp:delete_event_click' row.event.id %}?origin={{ request.path}}" class="btn btn-danger">Delete<a/>
+                                                        {% endif %}
+                                                    </td>
                                                 </tr>
                                             {% endfor %}
                                         </tbody>
@@ -121,6 +127,7 @@
                 { "orderable": false, "targets": 1 },
                 { "orderable": false, "targets": 2 },
                 { "orderable": false, "targets": 3 },
+                { "orderable": false, "targets": 5 },
             ]
         });
     </script>

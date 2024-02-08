@@ -213,6 +213,13 @@ def delete_event(request, event_id):
     else:
         return JsonResponse({'message': 'Error!'}, status=400)
 
+def delete_event_click(request, event_id):
+    origin_url = request.GET.get('origin', '/')
+    event = get_object_or_404(Event, id=event_id)
+    event.delete()
+    messages.success(request, 'Event success delete.')
+    return redirect(origin_url)
+
 def edit_event(request, event_id):
     """ mainly handle drag drop event """
     parsed_body = request.POST.dict()
