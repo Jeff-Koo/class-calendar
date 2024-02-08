@@ -82,7 +82,7 @@
                                     <tbody>
                                         {% for row in future_events_with_dates %}
                                             <tr role="row" class="odd future-events-row">
-                                                <td>{{ row.event_date }}</td>
+                                                <td data-order="{{ row.event_date }}">{{ row.event_date }}</td>
                                                 <td>({{ row.event_date_weekday }})</td>
                                                 <td>{{ row.event_start_time }}</td>
                                                 <td>{{ row.event_end_time }}</td>
@@ -116,7 +116,7 @@
                                     <tbody>
                                         {% for row in all_events_with_dates %}
                                             <tr role="row" class="odd all-events-row">
-                                                <td>{{ row.event_date }}</td>
+                                                <td data-order="{{ row.event_date }}">{{ row.event_date }}</td>
                                                 <td>({{ row.event_date_weekday }})</td>
                                                 <td>{{ row.event_start_time }}</td>
                                                 <td>{{ row.event_end_time }}</td>
@@ -140,13 +140,12 @@
 {% block extrascripts %}
     <script type="text/javascript" src="{% static 'js/plugins/jquery.dataTables.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/plugins/dataTables.bootstrap.min.js' %}"></script>
-    <script src="https://cdn.datatables.net/plug-ins/1.13.7/sorting/date-eu.js"></script>
     <script type="text/javascript">
         $('#FutureEventsDataTable').DataTable({
             order: [[0, 'asc']],
             "pageLength": 25,
             "columnDefs": [
-                { "orderable": true,  "targets": 0, "type": "date-eu" },
+                { "orderable": true,  "targets": 0 },
                 { "orderable": false, "targets": 1 },
                 { "orderable": false, "targets": 2 },
                 { "orderable": false, "targets": 3 },
@@ -158,7 +157,7 @@
             order: [[0, 'desc']],
             "pageLength": 25,
             "columnDefs": [
-                { "orderable": true,  "targets": 0, "type": "date-eu" },
+                { "orderable": true,  "targets": 0 },
                 { "orderable": false, "targets": 1 },
                 { "orderable": false, "targets": 2 },
                 { "orderable": false, "targets": 3 },
