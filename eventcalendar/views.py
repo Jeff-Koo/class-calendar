@@ -8,6 +8,9 @@ from calendarapp.models import Event
 
 weekday_names = list(calendar.day_abbr)
 
+
+
+
 class DashboardView(LoginRequiredMixin, View):
     login_url = "accounts:signin"
     template_name = "calendarapp/dashboard.html"
@@ -26,7 +29,9 @@ class DashboardView(LoginRequiredMixin, View):
             event_end_time = event.end_time.time()
             
             event_color = "" # default none
-            if event.start_time < now:
+            if event.room == 'OFF':
+                event_color = "#808080"    # specific Grey Color for the event stated OFF 
+            elif event.start_time < now:
                 if event.attendence:
                     event_color = "#2ec285" # green
                 else:
@@ -49,7 +54,9 @@ class DashboardView(LoginRequiredMixin, View):
             event_end_time = event.end_time.time()
             
             event_color = "" # default none
-            if event.start_time < now:
+            if event.room == 'OFF':
+                event_color = "#808080"    # specific Grey Color for the event stated OFF 
+            elif event.start_time < now:
                 if event.attendence:
                     event_color = "#2ec285" # green
                 else:

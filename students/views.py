@@ -17,6 +17,8 @@ weekday_names = list(calendar.day_abbr)
 def get_event_color_student_detail(event):
     now = datetime.now()
     event_color = "" # default none
+    if event.room == 'OFF':
+        return "#808080"    # specific Grey Color for the event stated OFF 
     if event.start_time < now:
         if event.attendence:
             event_color = "#2ec285" # green

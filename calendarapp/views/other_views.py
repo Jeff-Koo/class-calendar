@@ -48,6 +48,8 @@ def next_month(d):
 def get_event_color(event):
     now = datetime.now()
     event_color = "#3788d8" # default blue
+    if event.room == 'OFF':
+        return "#808080"    # specific Grey Color for the event stated OFF 
     if event.start_time < now:
         if event.attendence:
             event_color = "#2ec285" # green
