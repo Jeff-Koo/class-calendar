@@ -53,7 +53,7 @@
                                                     <td style="background-color: {{ row.event_color }};">{{ row.event.attendence }}</td>
                                                     <td>
                                                         {% if row.event.room == 'OFF' %}
-                                                            <a href="{% url 'calendarapp:delete_event_click' row.event.id %}?origin={{ request.path}}" class="btn btn-danger">Delete<a/>
+                                                            <a href="{% url 'calendarapp:delete_event_click' row.event.id %}?origin={{ request.path}}" class="btn btn-danger confirmation">Delete<a/>
                                                         {% endif %}
                                                     </td>
                                                 </tr>
@@ -148,6 +148,12 @@
         closeBtn7.addEventListener('click',()=>{
             const modal = document.getElementById('editStudentModal')
             modal.style.display = 'none';
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $('.confirmation').on('click', function () {
+            return confirm('Are you sure to Delete?');
         });
     </script>
 {% endblock extrascripts %}
