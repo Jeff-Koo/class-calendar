@@ -22,7 +22,7 @@
 {% block content %}
 <div class="row">
     <div class="col-md-12">
-        <div class="tile row" style="height: max(calc(10em + 11 * 2 * 3em), 100%)">
+        <div class="tile row">
             <div class="col-md-3 d-none d-md-block">
                 <div id="external-events">
                     <h4 class="mb-4">Today's Events</h4>
@@ -143,6 +143,7 @@
         var today = new Date();
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
+            height: 1100,
             schedulerLicenseKey: '{{ scheduler_license_key }}',
             views: {
                 timeGridFiveDay: {
