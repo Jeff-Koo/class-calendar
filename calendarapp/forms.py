@@ -84,7 +84,7 @@ class InputMemberToEventForm(forms.Form):
         widget=forms.Textarea(attrs={
             'class': 'form-control border-radius-0 mb-2', 
             'placeholder': 'e.g.\n2023/12/1\n2023/12/15\n2024/1/1', 
-            'rows': 20, 
+            'rows': 26, 
         }),
         required=True
     )

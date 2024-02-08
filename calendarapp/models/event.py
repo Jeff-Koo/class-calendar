@@ -11,6 +11,7 @@ class ROOM_CHOICES(models.TextChoices):
     ROOM_A = 'A', 'Room A'
     ROOM_B = 'B', 'Room B'
     ROOM_C = 'C', 'Room C'
+    ROOM_OFF = 'OFF', 'OFF'
 
 
 class EventManager(models.Manager):
