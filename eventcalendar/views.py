@@ -24,6 +24,7 @@ class DashboardView(LoginRequiredMixin, View):
         now = datetime.now()
         all_events_with_dates = []
         for event in all_events:
+            datetime_for_sorting = event.start_time.strftime('%s')
             event_date = event.start_time.date()
             event_start_time = event.start_time.time()
             event_end_time = event.end_time.time()
@@ -39,6 +40,7 @@ class DashboardView(LoginRequiredMixin, View):
             
             event_dict = {
                 "event": event,
+                "datetime_for_sorting": datetime_for_sorting,
                 "event_date": event_date.strftime("%Y/%m/%d"),
                 "event_date_weekday": weekday_names[event_date.weekday()], 
                 "event_start_time": event_start_time.strftime("%I:%M %p"),
@@ -49,6 +51,7 @@ class DashboardView(LoginRequiredMixin, View):
         
         future_events_with_dates = []
         for event in future_events:
+            datetime_for_sorting = event.start_time.strftime('%s')
             event_date = event.start_time.date()
             event_start_time = event.start_time.time()
             event_end_time = event.end_time.time()
@@ -64,6 +67,7 @@ class DashboardView(LoginRequiredMixin, View):
             
             event_dict = {
                 "event": event,
+                "datetime_for_sorting": datetime_for_sorting,
                 "event_date": event_date.strftime("%Y/%m/%d"),
                 "event_date_weekday": weekday_names[event_date.weekday()], 
                 "event_start_time": event_start_time.strftime("%I:%M %p"),

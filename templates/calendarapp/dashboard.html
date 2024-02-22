@@ -72,7 +72,7 @@
                                     <thead>
                                         <tr role="row">
                                             <th class="sorting col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Date</th>
-                                            <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Weekday: activate to sort column ascending">Weekday</th>
+                                            {% comment %} <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Weekday: activate to sort column ascending">Weekday</th> {% endcomment %}
                                             <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Start Time: activate to sort column ascending">Start</th>
                                             <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="End Time: activate to sort column ascending">End</th>
                                             <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Student: activate to sort column ascending">Student</th>
@@ -82,8 +82,8 @@
                                     <tbody>
                                         {% for row in future_events_with_dates %}
                                             <tr role="row" class="odd future-events-row">
-                                                <td data-order="{{ row.event_date }}">{{ row.event_date }}</td>
-                                                <td>({{ row.event_date_weekday }})</td>
+                                                <td data-order="{{ row.datetime_for_sorting }}">{{ row.event_date }} ({{ row.event_date_weekday }})</td>
+                                                {% comment %} <td>({{ row.event_date_weekday }})</td> {% endcomment %}
                                                 <td>{{ row.event_start_time }}</td>
                                                 <td>{{ row.event_end_time }}</td>
                                                 <td>{{ row.event.student }}</td>
@@ -106,7 +106,7 @@
                                     <thead>
                                         <tr role="row">
                                             <th class="sorting_desc col-1" tabindex="0" aria-controls="AllEventsDataTable" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Date</th>
-                                            <th class="col-1" tabindex="0" aria-controls="AllEventsDataTable" rowspan="1" colspan="1" aria-label="Weekday: activate to sort column ascending">Weekday</th>
+                                            {% comment %} <th class="col-1" tabindex="0" aria-controls="AllEventsDataTable" rowspan="1" colspan="1" aria-label="Weekday: activate to sort column ascending">Weekday</th> {% endcomment %}
                                             <th class="col-1" tabindex="0" aria-controls="AllEventsDataTable" rowspan="1" colspan="1" aria-label="Start Time: activate to sort column ascending">Start</th>
                                             <th class="col-1" tabindex="0" aria-controls="AllEventsDataTable" rowspan="1" colspan="1" aria-label="End Time: activate to sort column ascending">End</th>
                                             <th class="col-1" tabindex="0" aria-controls="FutureEventsDataTable" rowspan="1" colspan="1" aria-label="Student: activate to sort column ascending">Student</th>
@@ -116,8 +116,8 @@
                                     <tbody>
                                         {% for row in all_events_with_dates %}
                                             <tr role="row" class="odd all-events-row">
-                                                <td data-order="{{ row.event_date }}">{{ row.event_date }}</td>
-                                                <td>({{ row.event_date_weekday }})</td>
+                                                <td data-order="{{ row.datetime_for_sorting }}">{{ row.event_date }} ({{ row.event_date_weekday }})</td>
+                                                {% comment %} <td>({{ row.event_date_weekday }})</td> {% endcomment %}
                                                 <td>{{ row.event_start_time }}</td>
                                                 <td>{{ row.event_end_time }}</td>
                                                 <td>{{ row.event.student }}</td>

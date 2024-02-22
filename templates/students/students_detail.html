@@ -35,7 +35,7 @@
                                         <thead>
                                             <tr role="row">
                                                 <th class="sorting_desc col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">Date</th>
-                                                <th class="col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Weekday: activate to sort column ascending">Weekday</th>
+                                                {% comment %} <th class="col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Weekday: activate to sort column ascending">Weekday</th> {% endcomment %}
                                                 <th class="col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Start Time: activate to sort column ascending">Start</th>
                                                 <th class="col-1" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="End Time: activate to sort column ascending">End</th>
                                                 {% comment %} <th class="sorting col-2" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Grade: activate to sort column ascending">Grade</th> {% endcomment %}
@@ -46,8 +46,8 @@
                                         <tbody>
                                             {% for row in event_list %}
                                                 <tr role="row" class="odd">
-                                                    <td data-order="{{ row.event_date }}">{{ row.event_date }}</td>
-                                                    <td>({{ row.event_date_weekday }})</td>
+                                                    <td data-order="{{ row.datetime_for_sorting }}">{{ row.event_date }} ({{ row.event_date_weekday }})</td>
+                                                    {% comment %} <td>({{ row.event_date_weekday }})</td> {% endcomment %}
                                                     <td>{{ row.event_start_time }}</td>
                                                     <td>{{ row.event_end_time }}</td>
                                                     <td style="background-color: {{ row.event_color }};">{{ row.event.attendence }}</td>
@@ -127,7 +127,7 @@
                 { "orderable": false, "targets": 1 },
                 { "orderable": false, "targets": 2 },
                 { "orderable": false, "targets": 3 },
-                { "orderable": false, "targets": 5 },
+                { "orderable": false, "targets": 4 },
             ]
         });
     </script>

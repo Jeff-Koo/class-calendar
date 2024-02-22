@@ -51,11 +51,13 @@ def get_student(request: HttpRequest, pk: int) -> HttpResponse:
     event_list = Event.objects.filter(student=student)
     events_with_dates = []
     for event in event_list:
+        datetime_for_sorting = event.start_time.strftime('%s')
         event_date = event.start_time.date()
         event_start_time = event.start_time.time()
         event_end_time = event.end_time.time()
         event_dict = {
             "event": event,
+            "datetime_for_sorting": datetime_for_sorting,
             "event_date": event_date.strftime("%Y/%m/%d"),
             "event_date_weekday": weekday_names[event_date.weekday()], 
             "event_start_time": event_start_time.strftime("%I:%M %p"),
