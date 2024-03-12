@@ -13,6 +13,7 @@ TIMESLOT_CHOICES = (
     ('10:30 ~ 11:30', '10:30 ~ 11:30'),
     ('11:00 ~ 12:00', '11:00 ~ 12:00'),
     ('11:30 ~ 12:30', '11:30 ~ 12:30'),
+    ('12:00 ~ 13:00', '12:00 ~ 13:00'),
     ('13:00 ~ 14:00', '13:00 ~ 14:00'),
     ('13:30 ~ 14:30', '13:30 ~ 14:30'),
     ('14:00 ~ 15:00', '14:00 ~ 15:00'),
@@ -56,7 +57,8 @@ class EventForm(forms.Form):
     room = forms.ChoiceField(
         label='Room', 
         choices=ROOM_CHOICES, 
-        widget=forms.Select(attrs={"class": "form-control"})
+        widget=forms.Select(attrs={"class": "form-control"}),
+        required=True,
     )
 
     def __init__(self, *args, **kwargs):
